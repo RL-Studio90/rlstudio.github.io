@@ -77,10 +77,12 @@ export const projectsData = [
     shortDescription: "Complete document suite for PDF editing and management.",
     fullDescription: "Next-generation private document utility suite delivering client-side PDF compression, merging, watermarking, cryptographic digital signing, and OCR text extraction with zero confidential data leaks.",
     screenshots: [
-      "images/pdfora.jpg"
+      "images/PDFora login screen.jpg",
+      "images/PDFora main screen.jpg",
+      "images/PDFora menu setting.jpg"
     ],
     techStack: ["Android Studio", "Flutter Mobile", "Dart FFI", "Supabase Storage", "WebAssembly"],
-    image: "images/pdfora.jpg",
+    image: "images/PDFora main screen.jpg",
     downloadUrl: "https://wa.me/97430854376?text=Hi%20R%26L%20Studio,%20I%20want%20early%20access%20to%20PDFORA",
     featured: false
   },
@@ -93,10 +95,14 @@ export const projectsData = [
     shortDescription: "Fast and reliable ride-hailing app.",
     fullDescription: "Full-stack on-demand transportation architecture featuring high-frequency GPS telemetry, automated trip dispatch algorithms, dynamic surge calculations, and dual passenger/driver apps with sub-100ms sync.",
     screenshots: [
-      "images/zonix_ride.jpg"
+      "images/Zonix Ride Splash Screen.jpg",
+      "images/Zonix Ride Startup.jpg",
+      "images/Zonix Ride Startup 2.jpg",
+      "images/Zonix Ride login screen.jpg",
+      "images/Zonix Ride Main Screen.jpg"
     ],
     techStack: ["Android Studio", "Flutter", "Dart", "Supabase Realtime", "WebSockets"],
-    image: "images/zonix_ride.jpg",
+    image: "images/Zonix Ride Main Screen.jpg",
     downloadUrl: "https://wa.me/97430854376?text=Hi%20R%26L%20Studio,%20tell%20me%20more%20about%20Zonix%20Ride",
     featured: false
   },
