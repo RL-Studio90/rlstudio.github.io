@@ -189,13 +189,26 @@ h1, h2, h3, h4, .font-display {
   justify-content: center;
 }
 
-.carousel-img {
-  max-height: 480px;
+.carousel-img,
+.clean-screenshot-img {
+  max-height: 62vh;
   max-width: 100%;
+  width: auto;
+  height: auto;
   object-fit: contain;
   transition: opacity 0.2s ease;
   border-radius: 0.75rem;
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+  background: transparent !important;
+  display: block;
+  margin: 0 auto;
+}
+
+.clean-screenshot-wrapper {
+  background: transparent !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .carousel-nav-btn,

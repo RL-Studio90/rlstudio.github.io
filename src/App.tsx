@@ -821,19 +821,23 @@ export default function App() {
               {/* Founder Profile */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center mb-24">
                 <div className="lg:col-span-5">
-                  <div className="relative rounded-2xl overflow-hidden shadow-xl border border-slate-200 dark:border-slate-800">
-                    <img
-                      src="/images/founder.jpg"
-                      alt="R & L Studio Lead Engineer"
-                      className="w-full h-auto object-cover aspect-square"
-                      loading="lazy"
-                      referrerPolicy="no-referrer"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-6">
-                      <div>
-                        <div className="text-lg font-bold text-white">Lead Systems Architect</div>
-                        <div className="text-xs text-slate-300">Cross-Platform Specialist · Doha, Qatar</div>
-                      </div>
+                  <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-blue-500/30 bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-950 p-6 flex flex-col items-center justify-center group">
+                    <div className="relative w-full aspect-square max-w-[340px] flex items-center justify-center">
+                      <img
+                        src="/images/founder-avatar.svg"
+                        alt="R & L Studio Lead Engineer Vector Avatar"
+                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.onerror = null;
+                          target.src = '/images/founder.jpg';
+                        }}
+                      />
+                    </div>
+                    <div className="w-full pt-4 mt-2 border-t border-blue-400/20 flex flex-col items-center text-center">
+                      <div className="text-base font-bold text-white font-display">Lead Systems Architect</div>
+                      <div className="text-xs text-blue-300 font-mono mt-0.5">Android Mobile Developer (VS Studio - Android Studio) · Doha, Qatar</div>
                     </div>
                   </div>
                 </div>
@@ -1696,11 +1700,11 @@ WITH CHECK (
               {selectedProject.title}
             </h2>
 
-            <div className="rounded-xl overflow-hidden mb-6 h-60 bg-slate-950">
-              <ProjectImageCard
-                image={selectedProject.image}
-                title={selectedProject.title}
-                category={selectedProject.category}
+            <div className="rounded-xl overflow-hidden mb-6 bg-slate-950/80 p-3 flex items-center justify-center">
+              <img
+                src={selectedProject.image}
+                alt={selectedProject.title}
+                className="max-h-[55vh] max-w-full h-auto w-auto object-contain mx-auto rounded-lg shadow-xl block"
               />
             </div>
 

@@ -271,11 +271,10 @@
           </button>
         </div>
 
-        <!-- Carousel Media Slide Viewer -->
-        <div class="relative bg-slate-950 flex items-center justify-center min-h-[380px] sm:min-h-[460px] p-4">
-          <!-- Slide Container -->
-          <div id="carouselMediaContainer" class="w-full h-full flex items-center justify-center">
-            <!-- Injected dynamically -->
+        <!-- Carousel Media Slide Viewer (Clean screenshot display only, NO background frame or template) -->
+        <div class="relative bg-slate-950/90 flex items-center justify-center p-4 sm:p-6">
+          <div id="carouselMediaContainer" class="w-full flex items-center justify-center">
+            <!-- Injected dynamically: ONLY clean <img> tag -->
           </div>
 
           <!-- Slide Navigation Arrows -->
@@ -514,8 +513,8 @@
           </span>
         `).join('');
 
-        // Prepare Screenshots
-        activeScreenshots = app.screenshots && app.screenshots.length > 0 ? app.screenshots : [app.image || 'images/hero.jpg'];
+        // Prepare Screenshots (ONLY project screenshots, NEVER hero.jpg fallback!)
+        activeScreenshots = app.screenshots && app.screenshots.length > 0 ? app.screenshots : (app.image ? [app.image] : []);
 
         renderCarouselSlide();
         renderThumbnails();
@@ -543,11 +542,11 @@
 
         const slideContainerId = `slide-media-${currentSlideIndex}`;
         carouselMediaContainer.innerHTML = `
-          <div id="${slideContainerId}" class="w-full h-full flex items-center justify-center p-2">
+          <div id="${slideContainerId}" class="clean-screenshot-wrapper w-full flex items-center justify-center p-2">
             <img
               src="${encodedSrc}"
               alt="${screenName}"
-              class="carousel-img"
+              class="clean-screenshot-img max-h-[65vh] max-w-full h-auto w-auto object-contain mx-auto rounded-lg shadow-xl block"
               loading="eager"
               onerror="if(!this.dataset.retried){this.dataset.retried='1'; this.src='/' + '${encodedSrc}'.replace(/^\\//,'');}"
             />
@@ -570,11 +569,11 @@
 
       function renderThumbnails() {
         if (activeScreenshots.length <= 1) {
-          carouselThumbnails.innerHTML = `
+          carouselThumbnails.innerHTML = activeScreenshots.length === 1 ? `
             <div class="thumb-item active">
               <img src="${encodeURI(activeScreenshots[0])}" alt="Single Screenshot" loading="eager" />
             </div>
-          `;
+          ` : '';
           prevSlideBtn.style.display = 'none';
           nextSlideBtn.style.display = 'none';
           return;
@@ -647,7 +646,7 @@
           const containerId = `project-img-box-${project.id}`;
           const isLive = project.status === 'Live';
           const statusClass = isLive ? 'status-pill live' : (project.status === 'Beta Testing' ? 'status-pill beta' : 'status-pill dev');
-          const previewImg = project.image || (project.screenshots && project.screenshots[0]) || 'images/hero.jpg';
+          const previewImg = project.image || (project.screenshots && project.screenshots[0]) || '';
           const screenCount = project.screenshots && project.screenshots.length > 0 ? project.screenshots.length : 1;
 
           return `
