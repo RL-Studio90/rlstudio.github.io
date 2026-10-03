@@ -29,26 +29,6 @@
 
 export const projectsData = [
   {
-    id: "ipay-finder",
-    title: "iPay Finder",
-    tagline: "Find. Navigate. Pay Smart.",
-    category: "Utility / Maps",
-    status: "Live",
-    shortDescription: "Qatar me nearest payment machines ko easily locate aur navigate karne ke liye smart app.",
-    fullDescription: "Qatar me nearest payment machines aur authorized kiosks ko easily locate aur turn-by-turn navigate karne ke liye tailored smart app. Built for Android with modern Flutter & Dart architecture, Supabase backend authentication, and bilingual English & Arabic localization.",
-    screenshots: [
-      "images/iPay Finder Splash Screen.jpg",
-      "images/iPay Finder Home Screen.jpg",
-      "images/iPay Finder Login Screen.jpg",
-      "images/iPay Finder Settings Menu.jpg",
-      "images/iPay Finder admin panel.jpg"
-    ],
-    techStack: ["Android Studio", "Flutter", "Dart", "Supabase Auth", "Google Maps API", "Bilingual RTL"],
-    image: "images/iPay Finder Home Screen.jpg",
-    downloadUrl: "https://wa.me/97430854376?text=Hi%20R%26L%20Studio,%20I%20am%20interested%20in%20iPay%20Finder%20app",
-    featured: true
-  },
-  {
     id: "cod-finder",
     title: "COD Finder",
     tagline: "Qatar's fastest COD machine locator",
@@ -66,6 +46,26 @@ export const projectsData = [
     techStack: ["Android Studio", "Flutter", "Dart", "Supabase", "GPS Routing", "Offline Cache"],
     image: "images/Cod Finder Main Screen.jpg",
     downloadUrl: "https://wa.me/97430854376?text=Hi%20R%26L%20Studio,%20I%20am%20interested%20in%20COD%20Finder%20app",
+    featured: true
+  },
+  {
+    id: "ipay-finder",
+    title: "iPay Finder",
+    tagline: "Find. Navigate. Pay Smart.",
+    category: "Utility / Maps",
+    status: "Live",
+    shortDescription: "Qatar me nearest payment machines ko easily locate aur navigate karne ke liye smart app.",
+    fullDescription: "Qatar me nearest payment machines aur authorized kiosks ko easily locate aur turn-by-turn navigate karne ke liye tailored smart app. Built for Android with modern Flutter & Dart architecture, Supabase backend authentication, and bilingual English & Arabic localization.",
+    screenshots: [
+      "images/iPay Finder Splash Screen.jpg",
+      "images/iPay Finder Home Screen.jpg",
+      "images/iPay Finder Login Screen.jpg",
+      "images/iPay Finder Settings Menu.jpg",
+      "images/iPay Finder admin panel.jpg"
+    ],
+    techStack: ["Android Studio", "Flutter", "Dart", "Supabase Auth", "Google Maps API", "Bilingual RTL"],
+    image: "images/iPay Finder Home Screen.jpg",
+    downloadUrl: "https://wa.me/97430854376?text=Hi%20R%26L%20Studio,%20I%20am%20interested%20in%20iPay%20Finder%20app",
     featured: true
   },
   {

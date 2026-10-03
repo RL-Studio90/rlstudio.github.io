@@ -539,15 +539,17 @@
         if (!activeScreenshots.length) return;
         const currentSrc = activeScreenshots[currentSlideIndex];
         const screenName = currentSrc.split('/').pop().replace('.jpg', '').replace('.png', '');
+        const encodedSrc = encodeURI(currentSrc);
 
         const slideContainerId = `slide-media-${currentSlideIndex}`;
         carouselMediaContainer.innerHTML = `
           <div id="${slideContainerId}" class="w-full h-full flex items-center justify-center p-2">
             <img
-              src="${currentSrc}"
+              src="${encodedSrc}"
               alt="${screenName}"
               class="carousel-img"
-              onerror="window.createGradientFallback('${slideContainerId}', '${currentApp?.title || 'Screen'}', '${screenName}')"
+              loading="eager"
+              onerror="if(!this.dataset.retried){this.dataset.retried='1'; this.src='/' + '${encodedSrc}'.replace(/^\\//,'');}"
             />
           </div>
         `;
@@ -557,8 +559,12 @@
 
         // Update active thumbnail
         document.querySelectorAll('.thumb-item').forEach((thumb, idx) => {
-          if (idx === currentSlideIndex) thumb.classList.add('active');
-          else thumb.classList.remove('active');
+          if (idx === currentSlideIndex) {
+            thumb.classList.add('active');
+            thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+          } else {
+            thumb.classList.remove('active');
+          }
         });
       }
 
@@ -566,7 +572,7 @@
         if (activeScreenshots.length <= 1) {
           carouselThumbnails.innerHTML = `
             <div class="thumb-item active">
-              <img src="${activeScreenshots[0]}" alt="Single Screenshot" onerror="this.onerror=null; this.src='images/logo.png';" />
+              <img src="${encodeURI(activeScreenshots[0])}" alt="Single Screenshot" loading="eager" />
             </div>
           `;
           prevSlideBtn.style.display = 'none';
@@ -579,7 +585,7 @@
 
         carouselThumbnails.innerHTML = activeScreenshots.map((src, idx) => `
           <div class="thumb-item ${idx === currentSlideIndex ? 'active' : ''}" data-index="${idx}">
-            <img src="${src}" alt="Thumb ${idx + 1}" onerror="this.onerror=null; this.src='images/logo.png';" />
+            <img src="${encodeURI(src)}" alt="Thumb ${idx + 1}" loading="eager" />
           </div>
         `).join('');
 

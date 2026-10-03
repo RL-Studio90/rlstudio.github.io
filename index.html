@@ -332,69 +332,10 @@
         <!-- 2 Flagship Preview Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
           
-          <!-- iPay Finder Card -->
-          <article class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
-            <div>
-              <div class="relative h-64 bg-slate-950 overflow-hidden">
-                <img
-                  src="images/iPay Finder Home Screen.jpg"
-                  alt="iPay Finder App Preview"
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                  onerror="this.onerror=null; this.src='images/iPay Finder Splash Screen.jpg';"
-                />
-                <div class="absolute top-4 right-4 text-xs font-semibold px-2.5 py-1 rounded shadow-md bg-emerald-600 text-white">
-                  Live in Qatar
-                </div>
-                <div class="absolute bottom-3 left-4 px-2.5 py-1 rounded-md bg-slate-900/80 backdrop-blur-sm text-[11px] font-mono text-blue-300">
-                  5 Screenshots Included
-                </div>
-              </div>
-              <div class="p-6">
-                <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-2">
-                  <span class="font-medium">Utility / Maps</span>
-                  <span aria-hidden="true">·</span>
-                  <span class="text-blue-600 dark:text-blue-400 font-mono">Android Studio</span>
-                </div>
-                <h3 class="text-2xl font-bold font-display text-slate-900 dark:text-white mb-1">
-                  iPay Finder
-                </h3>
-                <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-3">
-                  Find. Navigate. Pay Smart.
-                </p>
-                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
-                  Qatar me nearest payment machines ko easily locate aur navigate karne ke liye smart app. Built for Android with modern Flutter &amp; Dart architecture, Supabase backend authentication, and bilingual English &amp; Arabic localization.
-                </p>
-                <div class="flex flex-wrap gap-1.5">
-                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Android Studio</span>
-                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Flutter &amp; Dart</span>
-                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Supabase Auth</span>
-                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Google Maps API</span>
-                </div>
-              </div>
-            </div>
-            <div class="px-6 pb-6 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-              <a
-                href="portfolio.html?open=ipay-finder"
-                class="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
-              >
-                Inspect All Screenshots &rarr;
-              </a>
-              <a
-                href="https://wa.me/97430854376?text=Hi%20R%26L%20Studio,%20I%20am%20interested%20in%20iPay%20Finder%20app"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-xs font-medium text-emerald-600 hover:underline"
-              >
-                Inquire on WhatsApp &rarr;
-              </a>
-            </div>
-          </article>
-
           <!-- COD Finder Card -->
           <article class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
             <div>
-              <div class="relative h-64 bg-slate-950 overflow-hidden">
+              <div class="relative h-64 bg-slate-950 overflow-hidden cursor-pointer btn-open-modal" data-project-id="cod-finder">
                 <img
                   src="images/Cod Finder Main Screen.jpg"
                   alt="COD Finder App Preview"
@@ -407,6 +348,11 @@
                 </div>
                 <div class="absolute bottom-3 left-4 px-2.5 py-1 rounded-md bg-slate-900/80 backdrop-blur-sm text-[11px] font-mono text-blue-300">
                   5 Screenshots Included
+                </div>
+                <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span class="px-3.5 py-1.5 rounded-lg bg-blue-600/90 text-white font-bold text-xs shadow-lg backdrop-blur-sm">
+                    Inspect Screenshots &rarr;
+                  </span>
                 </div>
               </div>
               <div class="p-6">
@@ -433,14 +379,80 @@
               </div>
             </div>
             <div class="px-6 pb-6 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-              <a
-                href="portfolio.html?open=cod-finder"
-                class="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+              <button
+                type="button"
+                data-project-id="cod-finder"
+                class="btn-open-modal text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
               >
                 Inspect All Screenshots &rarr;
-              </a>
+              </button>
               <a
                 href="https://wa.me/97430854376?text=Hi%20R%26L%20Studio,%20I%20am%20interested%20in%20COD%20Finder%20app"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-xs font-medium text-emerald-600 hover:underline"
+              >
+                Inquire on WhatsApp &rarr;
+              </a>
+            </div>
+          </article>
+
+          <!-- iPay Finder Card -->
+          <article class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+            <div>
+              <div class="relative h-64 bg-slate-950 overflow-hidden cursor-pointer btn-open-modal" data-project-id="ipay-finder">
+                <img
+                  src="images/iPay Finder Home Screen.jpg"
+                  alt="iPay Finder App Preview"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                  onerror="this.onerror=null; this.src='images/iPay Finder Splash Screen.jpg';"
+                />
+                <div class="absolute top-4 right-4 text-xs font-semibold px-2.5 py-1 rounded shadow-md bg-emerald-600 text-white">
+                  Live in Qatar
+                </div>
+                <div class="absolute bottom-3 left-4 px-2.5 py-1 rounded-md bg-slate-900/80 backdrop-blur-sm text-[11px] font-mono text-blue-300">
+                  5 Screenshots Included
+                </div>
+                <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span class="px-3.5 py-1.5 rounded-lg bg-blue-600/90 text-white font-bold text-xs shadow-lg backdrop-blur-sm">
+                    Inspect Screenshots &rarr;
+                  </span>
+                </div>
+              </div>
+              <div class="p-6">
+                <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-2">
+                  <span class="font-medium">Utility / Maps</span>
+                  <span aria-hidden="true">·</span>
+                  <span class="text-blue-600 dark:text-blue-400 font-mono">Android Studio</span>
+                </div>
+                <h3 class="text-2xl font-bold font-display text-slate-900 dark:text-white mb-1">
+                  iPay Finder
+                </h3>
+                <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-3">
+                  Find. Navigate. Pay Smart.
+                </p>
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                  Qatar me nearest payment machines ko easily locate aur navigate karne ke liye smart app. Built for Android with modern Flutter &amp; Dart architecture, Supabase backend authentication, and bilingual English &amp; Arabic localization.
+                </p>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Android Studio</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Flutter &amp; Dart</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Supabase Auth</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Google Maps API</span>
+                </div>
+              </div>
+            </div>
+            <div class="px-6 pb-6 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <button
+                type="button"
+                data-project-id="ipay-finder"
+                class="btn-open-modal text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
+              >
+                Inspect All Screenshots &rarr;
+              </button>
+              <a
+                href="https://wa.me/97430854376?text=Hi%20R%26L%20Studio,%20I%20am%20interested%20in%20iPay%20Finder%20app"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="text-xs font-medium text-emerald-600 hover:underline"
@@ -647,8 +659,106 @@
       </div>
     </footer>
 
+    <!-- ====================================================================
+         SCREENSHOTS CAROUSEL MODAL (HIGH RESOLUTION INSPECTION)
+         ==================================================================== -->
+    <div id="carouselModal" class="carousel-modal-backdrop" role="dialog" aria-modal="true">
+      <div class="carousel-modal-content">
+        
+        <!-- Modal Header Bar -->
+        <div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span id="modalAppStatus" class="status-pill live">Live</span>
+            <div>
+              <h2 id="modalAppTitle" class="text-xl sm:text-2xl font-bold font-display text-slate-900 dark:text-white leading-tight">
+                App Title
+              </h2>
+              <div class="text-xs text-blue-600 dark:text-blue-400 font-semibold" id="modalAppTagline">
+                Tagline
+              </div>
+            </div>
+          </div>
+          <button id="closeCarouselBtn" type="button" aria-label="Close modal" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Carousel Media Slide Viewer -->
+        <div class="relative bg-slate-950 flex items-center justify-center min-h-[380px] sm:min-h-[460px] p-4">
+          <div id="carouselMediaContainer" class="w-full h-full flex items-center justify-center"></div>
+
+          <!-- Navigation Arrows -->
+          <button id="prevSlideBtn" type="button" aria-label="Previous screenshot" class="carousel-nav-btn prev">
+            <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button id="nextSlideBtn" type="button" aria-label="Next screenshot" class="carousel-nav-btn next">
+            <svg class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+
+          <!-- Current Screen Caption & Counter Pill -->
+          <div class="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-slate-900/90 text-white text-xs font-mono backdrop-blur-md border border-slate-700/60 shadow-lg flex items-center gap-3 whitespace-nowrap">
+            <span id="screenshotCaption" class="font-medium text-slate-200">Screen Name</span>
+            <span class="text-slate-500">|</span>
+            <span id="screenshotCounter" class="text-blue-400 font-bold">1 / 5</span>
+          </div>
+        </div>
+
+        <!-- Thumbnail Navigation Strip -->
+        <div class="p-4 bg-slate-100 dark:bg-slate-950/60 border-b border-slate-200 dark:border-slate-800">
+          <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2 px-1">
+            Screenshots Gallery (Click to View)
+          </div>
+          <div id="carouselThumbnails" class="flex gap-2.5 overflow-x-auto pb-1"></div>
+        </div>
+
+        <!-- Modal Bottom Details -->
+        <div class="p-6 sm:p-8 space-y-6">
+          <div>
+            <h3 class="text-xs uppercase tracking-wider font-bold text-slate-400 mb-2">Description &amp; Architecture</h3>
+            <p id="modalAppDescription" class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Detailed app description...
+            </p>
+          </div>
+
+          <div>
+            <h3 class="text-xs uppercase tracking-wider font-bold text-slate-400 mb-2">Technology Stack</h3>
+            <div id="modalAppTechStack" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <div class="pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-4">
+            <a
+              id="modalActionBtn"
+              href="https://wa.me/97430854376"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-md transition flex items-center gap-2"
+            >
+              <span>Inquire About This App on WhatsApp</span>
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+            <button
+              id="closeCarouselBottomBtn"
+              type="button"
+              class="px-4 py-2 text-xs font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 cursor-pointer"
+            >
+              Close Window
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <!-- Scripts -->
-    <script>
+    <script type="module">
+      import { projectsData } from './js/projects-data.js';
+
       // Year Setup
       document.getElementById('currentYear').textContent = new Date().getFullYear();
 
@@ -675,6 +785,155 @@
       });
       mobileDrawer?.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => mobileDrawer.classList.add('hidden'));
+      });
+
+      // Modal carousel logic
+      const rawProjects = window.RL_PROJECTS_DATA || projectsData || [];
+      const carouselModal = document.getElementById('carouselModal');
+      const closeCarouselBtn = document.getElementById('closeCarouselBtn');
+      const closeCarouselBottomBtn = document.getElementById('closeCarouselBottomBtn');
+      const modalAppTitle = document.getElementById('modalAppTitle');
+      const modalAppTagline = document.getElementById('modalAppTagline');
+      const modalAppStatus = document.getElementById('modalAppStatus');
+      const modalAppDescription = document.getElementById('modalAppDescription');
+      const modalAppTechStack = document.getElementById('modalAppTechStack');
+      const carouselMediaContainer = document.getElementById('carouselMediaContainer');
+      const carouselThumbnails = document.getElementById('carouselThumbnails');
+      const screenshotCaption = document.getElementById('screenshotCaption');
+      const screenshotCounter = document.getElementById('screenshotCounter');
+      const prevSlideBtn = document.getElementById('prevSlideBtn');
+      const nextSlideBtn = document.getElementById('nextSlideBtn');
+      const modalActionBtn = document.getElementById('modalActionBtn');
+
+      let currentApp = null;
+      let currentSlideIndex = 0;
+      let activeScreenshots = [];
+
+      function openCarouselModal(app) {
+        currentApp = app;
+        currentSlideIndex = 0;
+
+        modalAppTitle.textContent = app.title;
+        modalAppTagline.textContent = app.tagline || app.category;
+        modalAppStatus.textContent = app.status;
+        modalAppStatus.className = app.status === 'Live' ? 'status-pill live' : (app.status === 'Beta Testing' ? 'status-pill beta' : 'status-pill dev');
+        modalAppDescription.textContent = app.fullDescription || app.description;
+
+        modalActionBtn.href = app.downloadUrl || `https://wa.me/97430854376?text=Inquiry%20regarding%20${encodeURIComponent(app.title)}`;
+
+        modalAppTechStack.innerHTML = (app.techStack || []).map(t => `
+          <span class="px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono text-[11px] border border-slate-200 dark:border-slate-700">
+            ${t}
+          </span>
+        `).join('');
+
+        activeScreenshots = app.screenshots && app.screenshots.length > 0 ? app.screenshots : [app.image || 'images/hero.jpg'];
+
+        renderCarouselSlide();
+        renderThumbnails();
+
+        carouselModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeCarouselModal() {
+        carouselModal.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      closeCarouselBtn?.addEventListener('click', closeCarouselModal);
+      closeCarouselBottomBtn?.addEventListener('click', closeCarouselModal);
+      carouselModal?.addEventListener('click', (e) => {
+        if (e.target === carouselModal) closeCarouselModal();
+      });
+
+      function renderCarouselSlide() {
+        if (!activeScreenshots.length) return;
+        const currentSrc = activeScreenshots[currentSlideIndex];
+        const screenName = currentSrc.split('/').pop().replace('.jpg', '').replace('.png', '');
+        const encodedSrc = encodeURI(currentSrc);
+
+        const slideContainerId = `slide-media-${currentSlideIndex}`;
+        carouselMediaContainer.innerHTML = `
+          <div id="${slideContainerId}" class="w-full h-full flex items-center justify-center p-2">
+            <img
+              src="${encodedSrc}"
+              alt="${screenName}"
+              class="carousel-img"
+              loading="eager"
+              onerror="if(!this.dataset.retried){this.dataset.retried='1'; this.src='/' + '${encodedSrc}'.replace(/^\\//,'');}"
+            />
+          </div>
+        `;
+
+        screenshotCaption.textContent = screenName;
+        screenshotCounter.textContent = `${currentSlideIndex + 1} / ${activeScreenshots.length}`;
+
+        document.querySelectorAll('.thumb-item').forEach((thumb, idx) => {
+          if (idx === currentSlideIndex) {
+            thumb.classList.add('active');
+            thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+          } else {
+            thumb.classList.remove('active');
+          }
+        });
+      }
+
+      function renderThumbnails() {
+        if (activeScreenshots.length <= 1) {
+          carouselThumbnails.innerHTML = `
+            <div class="thumb-item active">
+              <img src="${encodeURI(activeScreenshots[0])}" alt="Single Screenshot" loading="eager" />
+            </div>
+          `;
+          prevSlideBtn.style.display = 'none';
+          nextSlideBtn.style.display = 'none';
+          return;
+        }
+
+        prevSlideBtn.style.display = 'flex';
+        nextSlideBtn.style.display = 'flex';
+
+        carouselThumbnails.innerHTML = activeScreenshots.map((src, idx) => `
+          <div class="thumb-item ${idx === currentSlideIndex ? 'active' : ''}" data-index="${idx}">
+            <img src="${encodeURI(src)}" alt="Thumb ${idx + 1}" loading="eager" />
+          </div>
+        `).join('');
+
+        carouselThumbnails.querySelectorAll('.thumb-item').forEach(item => {
+          item.addEventListener('click', () => {
+            currentSlideIndex = parseInt(item.getAttribute('data-index'), 10);
+            renderCarouselSlide();
+          });
+        });
+      }
+
+      prevSlideBtn?.addEventListener('click', (e) => {
+        e.preventDefault();
+        currentSlideIndex = (currentSlideIndex - 1 + activeScreenshots.length) % activeScreenshots.length;
+        renderCarouselSlide();
+      });
+
+      nextSlideBtn?.addEventListener('click', (e) => {
+        e.preventDefault();
+        currentSlideIndex = (currentSlideIndex + 1) % activeScreenshots.length;
+        renderCarouselSlide();
+      });
+
+      window.addEventListener('keydown', (e) => {
+        if (!carouselModal.classList.contains('active')) return;
+        if (e.key === 'ArrowLeft') prevSlideBtn?.click();
+        if (e.key === 'ArrowRight') nextSlideBtn?.click();
+        if (e.key === 'Escape') closeCarouselModal();
+      });
+
+      // Attach click triggers to cards
+      document.querySelectorAll('.btn-open-modal').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const pId = btn.getAttribute('data-project-id');
+          const targetProj = rawProjects.find(p => p.id === pId);
+          if (targetProj) openCarouselModal(targetProj);
+        });
       });
     </script>
   </body>
