@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us &amp; Map | R &amp; L Studio - Doha, Qatar</title>
+    <meta
+      name="description"
+      content="Get in touch with R &amp; L Studio in Doha, Qatar. Inquire about Android mobile app development, Flutter engineering, and Supabase integration."
+    />
+    <meta name="keywords" content="Contact R&L Studio, mobile app developer Doha, Flutter agency Qatar, hire Android developer Qatar, Supabase developer Doha" />
+    <meta name="author" content="R &amp; L Studio" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://randlstudio.netlify.app/contact.html" />
+
+    <!-- OpenGraph Metadata -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="R &amp; L Studio" />
+    <meta property="og:title" content="Contact R &amp; L Studio | Android Mobile Developer Doha, Qatar" />
+    <meta
+      property="og:description"
+      content="Send a project inquiry or connect with our lead engineering team in Doha, Qatar via Supabase form or WhatsApp."
+    />
+    <meta property="og:image" content="images/hero.jpg" />
+    <meta property="og:url" content="https://randlstudio.netlify.app/contact.html" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Contact R &amp; L Studio" />
+    <meta
+      name="twitter:description"
+      content="Reach our Doha development studio for cross-platform Android mobile app inquiries."
+    />
+    <meta name="twitter:image" content="images/hero.jpg" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS CDN & Custom Config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['Outfit', 'sans-serif'],
+              sans: ['Plus Jakarta Sans', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Supabase JS Client v2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ContactPage",
+      "name": "Contact R & L Studio",
+      "description": "Direct contact page and geographic map for R & L Studio in Doha, Qatar.",
+      "url": "https://randlstudio.netlify.app/contact.html",
+      "mainEntity": {
+        "@type": "Organization",
+        "name": "R & L Studio",
+        "telephone": "+974-3085-4376",
+        "email": "rlstudiox90@gmail.com",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "West Bay Financial District",
+          "addressLocality": "Doha",
+          "addressCountry": "QA"
+        }
+      }
+    }
+    </script>
+  </head>
+  <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-200 min-h-screen flex flex-col justify-between">
+    
+    <!-- ====================================================================
+         1. HEADER & NAVIGATION (MULTI-PAGE ROUTING)
+         ==================================================================== -->
+    <header class="sticky top-0 z-40 header-glass">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        
+        <!-- Brand Identity with Logo -->
+        <a href="index.html" class="flex items-center gap-3 group text-left">
+          <img
+            src="images/logo.png"
+            alt="R & L Studio Logo"
+            class="w-11 h-11 rounded-xl object-contain shadow-sm border border-slate-200/80 dark:border-slate-800"
+            onerror="this.onerror=null; this.src='images/logo.svg';"
+          />
+          <div>
+            <div class="text-xl sm:text-2xl font-extrabold tracking-tight font-display text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors leading-none">
+              R &amp; L Studio
+            </div>
+            <div class="text-[11px] font-mono text-slate-500 dark:text-slate-400 mt-1 truncate max-w-[200px] sm:max-w-none">
+              Android Mobile Developer (VS Studio - Android Studio)
+            </div>
+          </div>
+        </a>
+
+        <!-- Desktop Multi-Page Navigation Links -->
+        <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600 dark:text-slate-300">
+          <a href="index.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</a>
+          <a href="portfolio.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Apps &amp; Portfolio</a>
+          <a href="about.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About Us</a>
+          <a href="contact.html" class="text-blue-600 dark:text-blue-400 font-bold border-b-2 border-blue-600 dark:border-blue-400 pb-1">Contact</a>
+        </nav>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-3">
+          <button id="themeToggle" type="button" aria-label="Toggle visual theme" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <svg id="sunIcon" class="w-4 h-4 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <svg id="moonIcon" class="w-4 h-4 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          </button>
+
+          <a
+            href="https://wa.me/97430854376?text=Hi%20R%26L%20Studio"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition-all whitespace-nowrap"
+          >
+            <span>WhatsApp (+974-3085-4376)</span>
+          </a>
+
+          <button id="mobileMenuBtn" type="button" aria-label="Toggle navigation drawer" class="md:hidden p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Dropdown Drawer -->
+      <div id="mobileDrawer" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-6 space-y-4 shadow-lg">
+        <a href="index.html" class="block font-semibold text-base py-1.5 text-slate-800 dark:text-slate-100 hover:text-blue-600">Home</a>
+        <a href="portfolio.html" class="block font-semibold text-base py-1.5 text-slate-800 dark:text-slate-100 hover:text-blue-600">Apps &amp; Portfolio (5)</a>
+        <a href="about.html" class="block font-semibold text-base py-1.5 text-slate-800 dark:text-slate-100 hover:text-blue-600">About Studio</a>
+        <a href="contact.html" class="block font-bold text-base py-1.5 text-blue-600 dark:text-blue-400">Contact Us</a>
+      </div>
+    </header>
+
+    <main class="py-16 md:py-24 flex-1">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Page Title & Header -->
+        <div class="max-w-3xl mb-12">
+          <div class="text-xs uppercase tracking-widest font-semibold text-blue-600 dark:text-blue-400 mb-2">
+            Direct Studio Inquiry
+          </div>
+          <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight font-display text-slate-900 dark:text-white mb-3">
+            Contact R &amp; L Studio
+          </h1>
+          <p class="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed">
+            Send an inquiry for Android mobile app development, Flutter cross-platform architecture, or Supabase cloud backend integration. Every message is securely logged directly into our live Supabase database table (<code class="font-mono text-blue-600 dark:text-blue-400 text-xs">contact_messages</code>).
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+          
+          <!-- Contact Form (Supabase Powered) -->
+          <div class="lg:col-span-7">
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 sm:p-10 shadow-sm">
+              
+              <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100 dark:border-slate-800">
+                <h2 class="text-xl font-bold font-display text-slate-900 dark:text-white">
+                  Send Project Inquiry
+                </h2>
+                <span class="text-xs font-mono text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  Supabase Live DB
+                </span>
+              </div>
+
+              <!-- Submission Alert Message Box -->
+              <div id="contactFormAlert" class="hidden mb-6 p-4 rounded-xl text-sm" role="alert"></div>
+
+              <form id="contactForm" class="space-y-5">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <label for="formName" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
+                      Your Full Name <span class="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="formName"
+                      required
+                      placeholder="e.g. Tariq Al-Mansoor"
+                      class="form-input"
+                    />
+                  </div>
+                  <div>
+                    <label for="formEmail" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
+                      Email Address <span class="text-red-500">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      id="formEmail"
+                      required
+                      placeholder="tariq@example.qa"
+                      class="form-input"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label for="formSubject" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
+                    Subject / Project Scope <span class="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="formSubject"
+                    required
+                    placeholder="e.g. Android Mobile App development (Flutter &amp; Supabase)"
+                    class="form-input"
+                  />
+                </div>
+
+                <div>
+                  <label for="formMessage" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
+                    Project Requirements &amp; Timelines <span class="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    id="formMessage"
+                    required
+                    rows="5"
+                    placeholder="Describe your app concept, target audience in Qatar or globally, feature requirements, and expected timeline..."
+                    class="form-input resize-y"
+                  ></textarea>
+                </div>
+
+                <button
+                  type="submit"
+                  id="formSubmitBtn"
+                  class="w-full py-4 px-6 rounded-xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer active:scale-98"
+                >
+                  <span id="formSubmitText">Submit Message to Supabase Database</span>
+                  <svg id="formSubmitSpinner" class="hidden animate-spin h-4 w-4 text-white" viewBox="0 0 24 24" fill="none">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                  </svg>
+                </button>
+              </form>
+
+            </div>
+          </div>
+
+          <!-- Studio Location & Details -->
+          <div class="lg:col-span-5 space-y-6">
+            
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 shadow-sm space-y-6">
+              <h2 class="text-xl font-bold font-display text-slate-900 dark:text-white">
+                Studio Coordinates
+              </h2>
+
+              <div class="space-y-4">
+                <!-- Phone & WhatsApp -->
+                <div class="flex items-start gap-4">
+                  <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Contact &amp; WhatsApp</div>
+                    <a href="https://wa.me/97430854376" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-slate-900 dark:text-white hover:text-emerald-600 transition">
+                      +974-3085-4376
+                    </a>
+                    <div class="text-[11px] text-slate-500">Instant responses via WhatsApp message</div>
+                  </div>
+                </div>
+
+                <!-- Direct Email -->
+                <div class="flex items-start gap-4">
+                  <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Official Email</div>
+                    <a href="mailto:rlstudiox90@gmail.com" class="text-sm font-bold text-slate-900 dark:text-white hover:text-blue-600 transition">
+                      rlstudiox90@gmail.com
+                    </a>
+                    <div class="text-[11px] text-slate-500">Monitored Sun – Thu (8:00 AM – 6:00 PM AST)</div>
+                  </div>
+                </div>
+
+                <!-- Location -->
+                <div class="flex items-start gap-4">
+                  <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Studio Location</div>
+                    <div class="text-sm font-bold text-slate-900 dark:text-white">Doha, State of Qatar</div>
+                    <div class="text-[11px] text-slate-500">West Bay Financial Center</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Doha Location Map Embed -->
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-4 shadow-sm overflow-hidden">
+              <div class="flex items-center justify-between px-2 mb-3">
+                <span class="text-xs font-bold text-slate-700 dark:text-slate-300">Doha, Qatar Location Map</span>
+                <span class="text-[11px] text-blue-600 dark:text-blue-400 font-mono">25.3217° N, 51.5292° E</span>
+              </div>
+              <div class="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 aspect-video relative">
+                <iframe
+                  title="Doha Qatar Location Map"
+                  src="https://maps.google.com/maps?q=Doha%2C%20Qatar&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                  width="100%"
+                  height="100%"
+                  style="border:0;"
+                  allowfullscreen=""
+                  loading="lazy"
+                  class="w-full h-full"
+                ></iframe>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- AdSense Banner Placement -->
+        <div class="mt-16 adsense-container rounded-xl border border-dashed border-slate-300 dark:border-slate-700 p-4 text-center bg-slate-100/50 dark:bg-slate-900/50">
+          <div class="text-[11px] uppercase tracking-wider font-semibold text-slate-400 dark:text-slate-500 mb-2">Advertisement</div>
+          <div class="flex items-center justify-center min-h-[90px] text-xs text-slate-500 dark:text-slate-400">
+            <span>Google AdSense Responsive Unit (728x90)</span>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         FOOTER WITH LEGAL LINKS
+         ==================================================================== -->
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-10">
+        <div class="md:col-span-2 space-y-3">
+          <div class="flex items-center gap-3">
+            <img
+              src="images/logo.png"
+              alt="R & L Studio Logo"
+              class="w-9 h-9 rounded-lg object-contain border border-slate-200 dark:border-slate-800"
+              onerror="this.onerror=null; this.src='images/logo.svg';"
+            />
+            <div class="text-xl font-bold font-display text-slate-900 dark:text-white">R &amp; L Studio</div>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-sm leading-relaxed">
+            Android Mobile Developer (VS Studio - Android Studio) in Doha, Qatar. Engineering scalable Flutter &amp; Supabase apps.
+          </p>
+          <div class="text-xs text-slate-500 dark:text-slate-400 space-y-1 pt-1">
+            <div>Email: <a href="mailto:rlstudiox90@gmail.com" class="text-blue-600 dark:text-blue-400 font-semibold hover:underline">rlstudiox90@gmail.com</a></div>
+            <div>Contact: <a href="https://wa.me/97430854376" class="text-emerald-600 font-semibold hover:underline">+974-3085-4376</a></div>
+            <div>Location: West Bay, Doha, State of Qatar</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-3">Pages</div>
+          <ul class="space-y-2 text-xs text-slate-600 dark:text-slate-400 font-medium">
+            <li><a href="index.html" class="hover:text-blue-600 transition">Home</a></li>
+            <li><a href="portfolio.html" class="hover:text-blue-600 transition">Apps &amp; Portfolio (5)</a></li>
+            <li><a href="about.html" class="hover:text-blue-600 transition">About Studio</a></li>
+            <li><a href="contact.html" class="text-blue-600 dark:text-blue-400 font-bold">Contact &amp; Map</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-3">Legal &amp; Trust</div>
+          <ul class="space-y-2 text-xs text-slate-600 dark:text-slate-400 font-medium">
+            <li><a href="privacy.html" class="hover:text-blue-600 transition">Privacy Policy (AdSense Compliant)</a></li>
+            <li><a href="terms.html" class="hover:text-blue-600 transition">Terms &amp; Conditions</a></li>
+            <li><a href="contact.html" class="hover:text-blue-600 transition">Support &amp; Inquiries</a></li>
+            <li><span class="text-slate-400">Governing Law: State of Qatar</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-3">
+        <div>&copy; <span id="year"></span> R &amp; L Studio. All rights reserved. Registered in Doha, Qatar.</div>
+        <div class="flex items-center gap-4 text-[11px]">
+          <span>Android Studio</span>
+          <span>·</span>
+          <span>VS Studio</span>
+          <span>·</span>
+          <span>Flutter &amp; Supabase</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Form Handler with Supabase Module -->
+    <script type="module">
+      import { submitContactForm } from './js/supabase.js';
+
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // Theme toggle
+      const themeToggle = document.getElementById('themeToggle');
+      const root = document.documentElement;
+      if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+      }
+      themeToggle?.addEventListener('click', () => {
+        root.classList.toggle('dark');
+        localStorage.setItem('theme', root.classList.contains('dark') ? 'dark' : 'light');
+      });
+
+      // Mobile Menu Drawer Toggle
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const mobileDrawer = document.getElementById('mobileDrawer');
+      mobileMenuBtn?.addEventListener('click', () => {
+        mobileDrawer?.classList.toggle('hidden');
+      });
+      mobileDrawer?.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => mobileDrawer.classList.add('hidden'));
+      });
+
+      // Pre-fill subject if navigated with ?project= or ?subject=
+      const urlParams = new URLSearchParams(window.location.search);
+      const projectParam = urlParams.get('project');
+      if (projectParam) {
+        const subjectInput = document.getElementById('formSubject');
+        if (subjectInput) {
+          subjectInput.value = `Inquiry regarding ${decodeURIComponent(projectParam)} mobile app`;
+        }
+      }
+
+      // Contact Form Handler
+      const contactForm = document.getElementById('contactForm');
+      const contactAlert = document.getElementById('contactFormAlert');
+      const submitBtn = document.getElementById('formSubmitBtn');
+      const submitText = document.getElementById('formSubmitText');
+      const submitSpinner = document.getElementById('formSubmitSpinner');
+
+      contactForm?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        submitBtn.disabled = true;
+        submitText.textContent = "Connecting to Supabase...";
+        submitSpinner.classList.remove('hidden');
+        contactAlert.classList.add('hidden');
+
+        const formData = {
+          name: document.getElementById('formName').value,
+          email: document.getElementById('formEmail').value,
+          subject: document.getElementById('formSubject').value,
+          message: document.getElementById('formMessage').value
+        };
+
+        const result = await submitContactForm(formData);
+
+        submitBtn.disabled = false;
+        submitText.textContent = "Submit Message to Supabase Database";
+        submitSpinner.classList.add('hidden');
+        contactAlert.classList.remove('hidden');
+
+        if (result.success) {
+          contactAlert.className = "mb-6 p-4 rounded-xl text-sm bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 font-medium";
+          contactAlert.innerHTML = `
+            <div class="flex items-center gap-2">
+              <span class="text-base font-bold text-emerald-600">✓</span>
+              <span>${result.message}</span>
+            </div>
+          `;
+          contactForm.reset();
+        } else {
+          contactAlert.className = "mb-6 p-4 rounded-xl text-sm bg-red-50 dark:bg-red-950/70 border border-red-300 dark:border-red-800 text-red-800 dark:text-red-200 font-medium";
+          contactAlert.innerHTML = `
+            <div class="flex items-center gap-2">
+              <span class="text-base font-bold text-red-600">✕</span>
+              <span><strong>Submission Error:</strong> ${result.message}</span>
+            </div>
+          `;
+        }
+      });
+    </script>
+  </body>
+</html>

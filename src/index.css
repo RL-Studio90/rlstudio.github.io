@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    letter-spacing: -0.01em;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.025em;
+  }
+}
+
+/* Custom glassmorphism and subtle elevation */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.dark .glass-panel {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Clean AdSense Container */
+.adsense-container {
+  min-height: 100px;
+  background-image: repeating-linear-gradient(45deg, rgba(148, 163, 184, 0.05) 0, rgba(148, 163, 184, 0.05) 10px, transparent 10px, transparent 20px);
+}

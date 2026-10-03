@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>R &amp; L Studio | Android Mobile Developer (VS Studio - Android Studio) - Doha, Qatar</title>
+    <meta
+      name="description"
+      content="R &amp; L Studio - Android Mobile Developer (VS Studio - Android Studio) in Doha, Qatar. Engineering high-performance apps with Flutter, Dart, and Supabase."
+    />
+    <meta name="keywords" content="R&L Studio, Android Mobile Developer, Android Studio, VS Studio, Flutter Qatar, Supabase developer, COD Finder, iPay Finder, Doha mobile apps" />
+    <meta name="author" content="R &amp; L Studio" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://randlstudio.netlify.app/index.html" />
+
+    <!-- OpenGraph Metadata -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="R &amp; L Studio" />
+    <meta property="og:title" content="R &amp; L Studio | Android Mobile Developer - Doha, Qatar" />
+    <meta
+      property="og:description"
+      content="Premier Android and cross-platform mobile app development studio in Doha, Qatar. High-performance apps built with Flutter, Dart, and Supabase."
+    />
+    <meta property="og:image" content="images/hero.jpg" />
+    <meta property="og:url" content="https://randlstudio.netlify.app/index.html" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="R &amp; L Studio | Android Mobile Developer" />
+    <meta
+      name="twitter:description"
+      content="Android Mobile Developer (VS Studio - Android Studio) in Doha, Qatar. Creator of COD Finder, iPay Finder, and scalable mobile systems."
+    />
+    <meta name="twitter:image" content="images/hero.jpg" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS CDN & Config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['Outfit', 'sans-serif'],
+              sans: ['Plus Jakarta Sans', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
+            colors: {
+              brand: {
+                50: '#eff6ff',
+                500: '#3b82f6',
+                600: '#2563eb',
+                700: '#1d4ed8',
+                whatsapp: '#25d366',
+              }
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Schema.org JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "R & L Studio",
+      "url": "https://randlstudio.netlify.app",
+      "logo": "https://randlstudio.netlify.app/images/logo.png",
+      "image": "https://randlstudio.netlify.app/images/hero.jpg",
+      "description": "Android Mobile Developer (VS Studio - Android Studio) specializing in Flutter, Dart, and Supabase in Doha, Qatar.",
+      "email": "rlstudiox90@gmail.com",
+      "telephone": "+974-3085-4376",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "West Bay Financial District",
+        "addressLocality": "Doha",
+        "addressCountry": "QA"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 25.3217,
+        "longitude": 51.5292
+      }
+    }
+    </script>
+  </head>
+  <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-200 min-h-screen flex flex-col justify-between">
+    
+    <!-- ====================================================================
+         1. HEADER & NAVIGATION (MULTI-PAGE ROUTING)
+         ==================================================================== -->
+    <header class="sticky top-0 z-40 header-glass">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        
+        <!-- Brand Identity with Logo -->
+        <a href="index.html" class="flex items-center gap-3 group text-left">
+          <img
+            src="images/logo.png"
+            alt="R & L Studio Logo"
+            class="w-11 h-11 rounded-xl object-contain shadow-sm border border-slate-200/80 dark:border-slate-800"
+            onerror="this.onerror=null; this.src='images/logo.svg';"
+          />
+          <div>
+            <div class="text-xl sm:text-2xl font-extrabold tracking-tight font-display text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors leading-none">
+              R &amp; L Studio
+            </div>
+            <div class="text-[11px] font-mono text-slate-500 dark:text-slate-400 mt-1 truncate max-w-[200px] sm:max-w-none">
+              Android Mobile Developer (VS Studio - Android Studio)
+            </div>
+          </div>
+        </a>
+
+        <!-- Desktop Multi-Page Navigation Links -->
+        <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600 dark:text-slate-300">
+          <a href="index.html" class="text-blue-600 dark:text-blue-400 font-bold border-b-2 border-blue-600 dark:border-blue-400 pb-1">Home</a>
+          <a href="portfolio.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Apps &amp; Portfolio</a>
+          <a href="about.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About Us</a>
+          <a href="contact.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Contact</a>
+        </nav>
+
+        <!-- Header Actions: WhatsApp, Theme Toggle & Menu -->
+        <div class="flex items-center gap-3">
+          <!-- Dark / Light Theme Toggle -->
+          <button id="themeToggle" type="button" aria-label="Toggle visual theme" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <svg id="sunIcon" class="w-4 h-4 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <svg id="moonIcon" class="w-4 h-4 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          </button>
+
+          <!-- Header WhatsApp Quick Button -->
+          <a
+            href="https://wa.me/97430854376?text=Hi%20R%26L%20Studio,%20I%20would%20like%20to%20discuss%20an%20Android%20app%20project"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition-all whitespace-nowrap"
+          >
+            <span>WhatsApp Us</span>
+            <span class="text-[11px] opacity-90">(+974-3085-4376)</span>
+          </a>
+
+          <!-- Mobile Hamburger -->
+          <button id="mobileMenuBtn" type="button" aria-label="Toggle navigation drawer" class="md:hidden p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Dropdown Drawer -->
+      <div id="mobileDrawer" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-6 space-y-4 shadow-lg">
+        <a href="index.html" class="block font-bold text-base py-1.5 text-blue-600 dark:text-blue-400">Home</a>
+        <a href="portfolio.html" class="block font-semibold text-base py-1.5 text-slate-800 dark:text-slate-100 hover:text-blue-600">Apps &amp; Portfolio (5)</a>
+        <a href="about.html" class="block font-semibold text-base py-1.5 text-slate-800 dark:text-slate-100 hover:text-blue-600">About Studio</a>
+        <a href="contact.html" class="block font-semibold text-base py-1.5 text-slate-800 dark:text-slate-100 hover:text-blue-600">Contact Us</a>
+        <div class="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
+          <a
+            href="https://wa.me/97430854376?text=Hi%20R%26L%20Studio"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="block w-full py-2.5 text-center text-xs font-bold text-white bg-emerald-600 rounded-lg"
+          >
+            Chat on WhatsApp (+974-3085-4376)
+          </a>
+          <a
+            href="mailto:rlstudiox90@gmail.com"
+            class="block w-full py-2 text-center text-xs font-semibold text-slate-600 dark:text-slate-300"
+          >
+            Email: rlstudiox90@gmail.com
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1">
+      <!-- ====================================================================
+           2. HERO SECTION
+           ==================================================================== -->
+      <section class="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-28 border-b border-slate-200 dark:border-slate-800 bg-gradient-to-b from-blue-50/70 via-white to-transparent dark:from-slate-900/50 dark:via-slate-950 dark:to-transparent">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <!-- Left Headline & CTAs -->
+            <div class="lg:col-span-7 space-y-6">
+              
+              <!-- Tagline & Status Badge -->
+              <div class="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-600 dark:text-slate-300">
+                <span class="flex h-2.5 w-2.5 relative">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                </span>
+                <span class="text-emerald-700 dark:text-emerald-400 font-bold">Available for Projects</span>
+                <span aria-hidden="true" class="text-slate-400">·</span>
+                <span class="text-slate-500 dark:text-slate-400">Doha, Qatar</span>
+                <span aria-hidden="true" class="text-slate-400">·</span>
+                <span class="font-mono text-blue-600 dark:text-blue-400">VS Studio &amp; Android Studio</span>
+              </div>
+
+              <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight font-display text-slate-900 dark:text-white leading-[1.12]">
+                Android Mobile Developer
+                <span class="block text-blue-600 dark:text-blue-400 text-3xl sm:text-4xl lg:text-5xl mt-2 font-normal font-sans">
+                  Specialized in Flutter, Dart &amp; Supabase
+                </span>
+              </h1>
+
+              <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-2xl">
+                Welcome to <strong>R &amp; L Studio</strong> in Doha, Qatar. We architect production Android applications with fluid 60fps native execution, real-time Supabase cloud synchronization, and localized utilities tailored for Qatar and global users.
+              </p>
+
+              <!-- Quick Action Buttons -->
+              <div class="pt-2 flex flex-wrap items-center gap-4">
+                <a
+                  href="portfolio.html"
+                  class="px-6 py-3.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer active:scale-95"
+                >
+                  <span>Explore Apps &amp; Portfolio</span>
+                  <span aria-hidden="true">&rarr;</span>
+                </a>
+
+                <a
+                  href="https://wa.me/97430854376?text=Hello%20R%26L%20Studio,%20I%20am%20interested%20in%20building%20an%20Android%20app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="px-6 py-3.5 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-md transition-all flex items-center gap-2 cursor-pointer active:scale-95"
+                >
+                  <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                    <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.072.043.419-.101.824z"/>
+                  </svg>
+                  <span>Chat on WhatsApp</span>
+                </a>
+
+                <a
+                  href="contact.html"
+                  class="px-6 py-3.5 text-sm font-bold text-slate-800 dark:text-slate-100 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 hover:border-blue-500 rounded-xl shadow-sm transition-all flex items-center gap-2"
+                >
+                  <span>Contact &amp; Map</span>
+                </a>
+              </div>
+
+              <!-- Proof Points -->
+              <div class="pt-6 border-t border-slate-200/80 dark:border-slate-800/80 grid grid-cols-3 gap-6">
+                <div>
+                  <div class="text-2xl sm:text-3xl font-extrabold text-blue-600 dark:text-blue-400 font-display tabular-nums">
+                    5 Apps
+                  </div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">Specialized Portfolio</div>
+                </div>
+                <div>
+                  <div class="text-2xl sm:text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 font-display tabular-nums">
+                    99.9%
+                  </div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">Supabase Cloud SLA</div>
+                </div>
+                <div>
+                  <div class="text-2xl sm:text-3xl font-extrabold text-indigo-600 dark:text-indigo-400 font-display tabular-nums">
+                    60 FPS
+                  </div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">Hardware Render</div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Right Hero Studio Visual -->
+            <div class="lg:col-span-5">
+              <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 bg-slate-900 group">
+                <img
+                  src="images/hero.jpg"
+                  alt="R & L Studio Operations"
+                  class="w-full h-auto object-cover aspect-[4/3] group-hover:scale-102 transition-transform duration-700"
+                  loading="eager"
+                  onerror="this.onerror=null; this.src='images/rl_studio_hero_1791024780658.jpg';"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/25 to-transparent flex flex-col justify-end p-6">
+                  <div class="flex items-center gap-2 text-xs text-blue-300 font-mono mb-1">
+                    <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    </svg>
+                    <span>Doha, Qatar · West Bay Financial Center</span>
+                  </div>
+                  <div class="text-xl font-bold text-white font-display">R &amp; L Studio Architecture</div>
+                  <div class="text-xs text-slate-300 mt-0.5">Android Mobile Developer (VS Studio - Android Studio)</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           3. FEATURED APPS PREVIEW (WITH DIRECT LINKS TO PORTFOLIO.HTML)
+           ==================================================================== -->
+      <section class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <div>
+            <div class="text-xs uppercase tracking-widest font-semibold text-blue-600 dark:text-blue-400 mb-2">
+              Flagship Showcase
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-bold font-display text-slate-900 dark:text-white mb-2">
+              Live &amp; Active Applications in Qatar
+            </h2>
+            <p class="text-sm text-slate-600 dark:text-slate-400 max-w-2xl leading-relaxed">
+              Explore our prominent Android applications actively running in Qatar, built with high precision Flutter &amp; Supabase architectures.
+            </p>
+          </div>
+
+          <a
+            href="portfolio.html"
+            class="inline-flex items-center gap-2 text-sm font-bold text-blue-600 dark:text-blue-400 hover:underline"
+          >
+            <span>View All 5 Apps on Portfolio Page</span>
+            <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+
+        <!-- 2 Flagship Preview Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          
+          <!-- iPay Finder Card -->
+          <article class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+            <div>
+              <div class="relative h-64 bg-slate-950 overflow-hidden">
+                <img
+                  src="images/iPay Finder Home Screen.jpg"
+                  alt="iPay Finder App Preview"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                  onerror="this.onerror=null; this.src='images/iPay Finder Splash Screen.jpg';"
+                />
+                <div class="absolute top-4 right-4 text-xs font-semibold px-2.5 py-1 rounded shadow-md bg-emerald-600 text-white">
+                  Live in Qatar
+                </div>
+                <div class="absolute bottom-3 left-4 px-2.5 py-1 rounded-md bg-slate-900/80 backdrop-blur-sm text-[11px] font-mono text-blue-300">
+                  5 Screenshots Included
+                </div>
+              </div>
+              <div class="p-6">
+                <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-2">
+                  <span class="font-medium">Utility / Maps</span>
+                  <span aria-hidden="true">·</span>
+                  <span class="text-blue-600 dark:text-blue-400 font-mono">Android Studio</span>
+                </div>
+                <h3 class="text-2xl font-bold font-display text-slate-900 dark:text-white mb-1">
+                  iPay Finder
+                </h3>
+                <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-3">
+                  Find. Navigate. Pay Smart.
+                </p>
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                  Qatar me nearest payment machines ko easily locate aur navigate karne ke liye smart app. Built for Android with modern Flutter &amp; Dart architecture, Supabase backend authentication, and bilingual English &amp; Arabic localization.
+                </p>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Android Studio</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Flutter &amp; Dart</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Supabase Auth</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Google Maps API</span>
+                </div>
+              </div>
+            </div>
+            <div class="px-6 pb-6 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <a
+                href="portfolio.html?open=ipay-finder"
+                class="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+              >
+                Inspect All Screenshots &rarr;
+              </a>
+              <a
+                href="https://wa.me/97430854376?text=Hi%20R%26L%20Studio,%20I%20am%20interested%20in%20iPay%20Finder%20app"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-xs font-medium text-emerald-600 hover:underline"
+              >
+                Inquire on WhatsApp &rarr;
+              </a>
+            </div>
+          </article>
+
+          <!-- COD Finder Card -->
+          <article class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+            <div>
+              <div class="relative h-64 bg-slate-950 overflow-hidden">
+                <img
+                  src="images/Cod Finder Main Screen.jpg"
+                  alt="COD Finder App Preview"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                  onerror="this.onerror=null; this.src='images/Cod Finder Splash Screen.jpg';"
+                />
+                <div class="absolute top-4 right-4 text-xs font-semibold px-2.5 py-1 rounded shadow-md bg-emerald-600 text-white">
+                  Live in Qatar
+                </div>
+                <div class="absolute bottom-3 left-4 px-2.5 py-1 rounded-md bg-slate-900/80 backdrop-blur-sm text-[11px] font-mono text-blue-300">
+                  5 Screenshots Included
+                </div>
+              </div>
+              <div class="p-6">
+                <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-2">
+                  <span class="font-medium">Utility / Delivery</span>
+                  <span aria-hidden="true">·</span>
+                  <span class="text-blue-600 dark:text-blue-400 font-mono">VS Studio</span>
+                </div>
+                <h3 class="text-2xl font-bold font-display text-slate-900 dark:text-white mb-1">
+                  COD Finder
+                </h3>
+                <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-3">
+                  Qatar's fastest COD machine locator
+                </p>
+                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                  Delivery riders ke liye Qatar me cash deposit machines (COD) fast find karne ki specialized app. Offline map caching, live operational status, aur instant route computation ke sath critical hours bachaata hai.
+                </p>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Android Studio</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Flutter &amp; Dart</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Supabase</span>
+                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">GPS Routing</span>
+                </div>
+              </div>
+            </div>
+            <div class="px-6 pb-6 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <a
+                href="portfolio.html?open=cod-finder"
+                class="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+              >
+                Inspect All Screenshots &rarr;
+              </a>
+              <a
+                href="https://wa.me/97430854376?text=Hi%20R%26L%20Studio,%20I%20am%20interested%20in%20COD%20Finder%20app"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-xs font-medium text-emerald-600 hover:underline"
+              >
+                Inquire on WhatsApp &rarr;
+              </a>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- In-Development Radar Banner -->
+        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div class="space-y-1 text-center md:text-left">
+            <div class="text-xs uppercase tracking-wider font-bold text-amber-500 flex items-center justify-center md:justify-start gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-amber-500 animate-ping"></span>
+              <span>Active Sprints in Development</span>
+            </div>
+            <h4 class="text-xl font-bold font-display text-slate-900 dark:text-white">
+              PDFORA, Zonix Ride &amp; BazarPulse
+            </h4>
+            <p class="text-xs text-slate-500 dark:text-slate-400 max-w-xl">
+              Next-generation productivity tools, on-demand ride-hailing algorithms, and multi-vendor marketplaces undergoing engineering on Android Studio.
+            </p>
+          </div>
+          <a
+            href="portfolio.html"
+            class="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-slate-900 dark:bg-blue-600 hover:bg-blue-600 transition whitespace-nowrap"
+          >
+            Open Full Projects Hub &rarr;
+          </a>
+        </div>
+
+        <!-- Compliant AdSense Banner Unit -->
+        <div class="mt-16 adsense-slot bg-slate-100/50 dark:bg-slate-900/50 text-center">
+          <div class="text-[11px] uppercase tracking-wider font-semibold text-slate-400 dark:text-slate-500 mb-1">
+            Advertisement
+          </div>
+          <div class="text-xs text-slate-500 dark:text-slate-400">
+            Google AdSense In-Content Placement (Responsive Leaderboard 728x90)
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ====================================================================
+           4. STUDIO SPOTLIGHT TEASER (LINK TO ABOUT.HTML)
+           ==================================================================== -->
+      <section class="py-20 bg-slate-100/70 dark:bg-slate-900/40 border-y border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <div class="lg:col-span-5">
+              <div class="relative rounded-2xl overflow-hidden shadow-xl border border-slate-200 dark:border-slate-800 bg-slate-900">
+                <img
+                  src="images/founder.jpg"
+                  alt="Lead Android Engineer R & L Studio"
+                  class="w-full h-auto object-cover aspect-square"
+                  loading="lazy"
+                  onerror="this.onerror=null; this.src='images/founder_avatar_1791024815459.jpg';"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent flex items-end p-6">
+                  <div>
+                    <div class="text-lg font-bold text-white">Lead Systems Architect</div>
+                    <div class="text-xs text-slate-300">Android Mobile Developer (VS Studio - Android Studio) · Doha, Qatar</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="lg:col-span-7 space-y-6">
+              <div class="text-xs uppercase tracking-widest font-semibold text-blue-600 dark:text-blue-400">
+                Studio Narrative &amp; Focus
+              </div>
+              <h2 class="text-3xl sm:text-4xl font-bold font-display text-slate-900 dark:text-white">
+                Solving Real-World Problems for Qatar's Rapidly Growing Digital Economy
+              </h2>
+              <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+                Headquartered in Doha, Qatar, <strong>R &amp; L Studio</strong> was founded to eliminate navigation and utility friction for residents, delivery couriers, and businesses. By combining <strong>Flutter</strong> cross-platform speed with <strong>Supabase</strong> PostgreSQL security, we create production systems that operate seamlessly offline and online.
+              </p>
+              
+              <div class="flex flex-wrap gap-3 pt-2">
+                <a
+                  href="about.html"
+                  class="px-5 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition"
+                >
+                  Read Full Studio Narrative &rarr;
+                </a>
+                <a
+                  href="contact.html"
+                  class="px-5 py-2.5 text-xs font-bold text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:border-blue-500 rounded-lg transition"
+                >
+                  Get in Touch
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           5. CALL TO ACTION (LINK TO CONTACT.HTML)
+           ==================================================================== -->
+      <section class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="max-w-3xl mx-auto space-y-4">
+          <div class="text-xs uppercase tracking-widest font-semibold text-emerald-600 dark:text-emerald-400">
+            Start Your Android App
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-bold font-display text-slate-900 dark:text-white">
+            Have a Mobile App Concept or Qatar Business Solution?
+          </h2>
+          <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            From initial wireframing in Android Studio and VS Studio to Supabase schema design and Google Play release, R &amp; L Studio brings your ideas to market.
+          </p>
+          <div class="pt-4 flex flex-wrap justify-center items-center gap-4">
+            <a
+              href="contact.html"
+              class="px-6 py-3 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md transition"
+            >
+              Open Contact Form &rarr;
+            </a>
+            <a
+              href="https://wa.me/97430854376?text=Hi%20R%26L%20Studio"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-6 py-3 text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-md transition"
+            >
+              WhatsApp (+974-3085-4376)
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ====================================================================
+         6. COMPREHENSIVE MULTI-PAGE FOOTER WITH LEGAL LINKS
+         ==================================================================== -->
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-10">
+        
+        <!-- Brand Info -->
+        <div class="md:col-span-2 space-y-3">
+          <div class="flex items-center gap-3">
+            <img
+              src="images/logo.png"
+              alt="R & L Studio Logo"
+              class="w-9 h-9 rounded-lg object-contain border border-slate-200 dark:border-slate-800"
+              onerror="this.onerror=null; this.src='images/logo.svg';"
+            />
+            <div class="text-xl font-bold font-display text-slate-900 dark:text-white">
+              R &amp; L Studio
+            </div>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-sm leading-relaxed">
+            Android Mobile Developer (VS Studio - Android Studio) in Doha, Qatar. Engineering scalable Flutter &amp; Supabase apps.
+          </p>
+          <div class="text-xs text-slate-500 dark:text-slate-400 space-y-1 pt-1">
+            <div>Email: <a href="mailto:rlstudiox90@gmail.com" class="text-blue-600 dark:text-blue-400 font-semibold hover:underline">rlstudiox90@gmail.com</a></div>
+            <div>Contact: <a href="https://wa.me/97430854376" class="text-emerald-600 font-semibold hover:underline">+974-3085-4376</a></div>
+            <div>Location: West Bay, Doha, State of Qatar</div>
+          </div>
+        </div>
+
+        <!-- Multi-Page Site Navigation -->
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-3">
+            Pages
+          </div>
+          <ul class="space-y-2 text-xs text-slate-600 dark:text-slate-400 font-medium">
+            <li><a href="index.html" class="text-blue-600 dark:text-blue-400 font-bold">Home</a></li>
+            <li><a href="portfolio.html" class="hover:text-blue-600 transition">Apps &amp; Portfolio (5)</a></li>
+            <li><a href="about.html" class="hover:text-blue-600 transition">About Studio</a></li>
+            <li><a href="contact.html" class="hover:text-blue-600 transition">Contact &amp; Map</a></li>
+          </ul>
+        </div>
+
+        <!-- AdSense & Compliance Legal Links -->
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-3">
+            Legal &amp; AdSense Trust
+          </div>
+          <ul class="space-y-2 text-xs text-slate-600 dark:text-slate-400 font-medium">
+            <li><a href="privacy.html" class="hover:text-blue-600 transition">Privacy Policy (AdSense Compliant)</a></li>
+            <li><a href="terms.html" class="hover:text-blue-600 transition">Terms &amp; Conditions</a></li>
+            <li><a href="contact.html" class="hover:text-blue-600 transition">Support &amp; Inquiries</a></li>
+            <li><span class="text-slate-400">Governing Law: State of Qatar</span></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-3">
+        <div>
+          &copy; <span id="currentYear"></span> R &amp; L Studio. All rights reserved. Registered in Doha, Qatar.
+        </div>
+        <div class="flex items-center gap-4 text-[11px]">
+          <span>Android Studio</span>
+          <span>·</span>
+          <span>VS Studio</span>
+          <span>·</span>
+          <span>Flutter &amp; Supabase</span>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+      // Year Setup
+      document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+      // Theme Toggle Logic
+      const themeToggle = document.getElementById('themeToggle');
+      const root = document.documentElement;
+
+      if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+      }
+
+      themeToggle?.addEventListener('click', () => {
+        root.classList.toggle('dark');
+        localStorage.setItem('theme', root.classList.contains('dark') ? 'dark' : 'light');
+      });
+
+      // Mobile Menu Drawer Toggle
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const mobileDrawer = document.getElementById('mobileDrawer');
+      mobileMenuBtn?.addEventListener('click', () => {
+        mobileDrawer?.classList.toggle('hidden');
+      });
+      mobileDrawer?.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => mobileDrawer.classList.add('hidden'));
+      });
+    </script>
+  </body>
+</html>

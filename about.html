@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us | R &amp; L Studio - Android Mobile Developer Doha, Qatar</title>
+    <meta
+      name="description"
+      content="Learn about R &amp; L Studio, a specialized mobile engineering firm headquartered in Doha, Qatar. Engineering cross-platform Android and Flutter applications with Supabase."
+    />
+    <meta name="keywords" content="About R&L Studio, Android Developer Qatar, Flutter agency Doha, Supabase architect Qatar, COD Finder developer" />
+    <meta name="author" content="R &amp; L Studio" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://randlstudio.netlify.app/about.html" />
+
+    <!-- OpenGraph Metadata -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="R &amp; L Studio" />
+    <meta property="og:title" content="About R &amp; L Studio | Android Mobile Developer Qatar" />
+    <meta
+      property="og:description"
+      content="Mobile systems architecture studio based in Doha, Qatar, specializing in Flutter, Dart, and Supabase."
+    />
+    <meta property="og:image" content="images/founder.jpg" />
+    <meta property="og:url" content="https://randlstudio.netlify.app/about.html" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="About R &amp; L Studio" />
+    <meta
+      name="twitter:description"
+      content="Mobile application engineering studio solving real infrastructure needs in Doha, Qatar."
+    />
+    <meta name="twitter:image" content="images/founder.jpg" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS CDN & Config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['Outfit', 'sans-serif'],
+              sans: ['Plus Jakarta Sans', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      "name": "About R & L Studio",
+      "description": "Background, technical capabilities, and leadership of R & L Studio in Doha, Qatar.",
+      "url": "https://randlstudio.netlify.app/about.html",
+      "mainEntity": {
+        "@type": "Organization",
+        "name": "R & L Studio",
+        "url": "https://randlstudio.netlify.app",
+        "logo": "https://randlstudio.netlify.app/images/logo.png",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Doha",
+          "addressCountry": "QA"
+        }
+      }
+    }
+    </script>
+  </head>
+  <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-200 min-h-screen flex flex-col justify-between">
+    
+    <!-- ====================================================================
+         1. HEADER & NAVIGATION (MULTI-PAGE ROUTING)
+         ==================================================================== -->
+    <header class="sticky top-0 z-40 header-glass">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        
+        <!-- Brand Identity with Logo -->
+        <a href="index.html" class="flex items-center gap-3 group text-left">
+          <img
+            src="images/logo.png"
+            alt="R & L Studio Logo"
+            class="w-11 h-11 rounded-xl object-contain shadow-sm border border-slate-200/80 dark:border-slate-800"
+            onerror="this.onerror=null; this.src='images/logo.svg';"
+          />
+          <div>
+            <div class="text-xl sm:text-2xl font-extrabold tracking-tight font-display text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors leading-none">
+              R &amp; L Studio
+            </div>
+            <div class="text-[11px] font-mono text-slate-500 dark:text-slate-400 mt-1 truncate max-w-[200px] sm:max-w-none">
+              Android Mobile Developer (VS Studio - Android Studio)
+            </div>
+          </div>
+        </a>
+
+        <!-- Desktop Multi-Page Navigation Links -->
+        <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600 dark:text-slate-300">
+          <a href="index.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</a>
+          <a href="portfolio.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Apps &amp; Portfolio</a>
+          <a href="about.html" class="text-blue-600 dark:text-blue-400 font-bold border-b-2 border-blue-600 dark:border-blue-400 pb-1">About Us</a>
+          <a href="contact.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Contact</a>
+        </nav>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-3">
+          <button id="themeToggle" type="button" aria-label="Toggle visual theme" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <svg id="sunIcon" class="w-4 h-4 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <svg id="moonIcon" class="w-4 h-4 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          </button>
+
+          <a
+            href="https://wa.me/97430854376?text=Hi%20R%26L%20Studio"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition-all whitespace-nowrap"
+          >
+            <span>WhatsApp Us</span>
+          </a>
+
+          <button id="mobileMenuBtn" type="button" aria-label="Toggle navigation drawer" class="md:hidden p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Dropdown Drawer -->
+      <div id="mobileDrawer" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-6 space-y-4 shadow-lg">
+        <a href="index.html" class="block font-semibold text-base py-1.5 text-slate-800 dark:text-slate-100 hover:text-blue-600">Home</a>
+        <a href="portfolio.html" class="block font-semibold text-base py-1.5 text-slate-800 dark:text-slate-100 hover:text-blue-600">Apps &amp; Portfolio (5)</a>
+        <a href="about.html" class="block font-bold text-base py-1.5 text-blue-600 dark:text-blue-400">About Studio</a>
+        <a href="contact.html" class="block font-semibold text-base py-1.5 text-slate-800 dark:text-slate-100 hover:text-blue-600">Contact Us</a>
+      </div>
+    </header>
+
+    <main class="py-16 md:py-24 flex-1">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
+        
+        <!-- Studio Narrative Hero -->
+        <section class="max-w-3xl">
+          <div class="text-xs uppercase tracking-widest font-semibold text-blue-600 dark:text-blue-400 mb-2">
+            Engineering Narrative &amp; Vision
+          </div>
+          <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight font-display text-slate-900 dark:text-white mb-6">
+            Building High-Impact Mobile Solutions for Qatar &amp; Global Markets
+          </h1>
+          <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
+            Headquartered in Doha, Qatar, <strong>R &amp; L Studio</strong> was founded with a clear directive: to engineer high-velocity, reliable, cross-platform Android mobile applications that solve acute real-world challenges for consumers, couriers, and enterprises.
+          </p>
+        </section>
+
+        <!-- The Problem Solving Story (COD Finder & iPay Finder) -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          <div class="lg:col-span-6 space-y-6">
+            <h2 class="text-2xl sm:text-3xl font-bold font-display text-slate-900 dark:text-white">
+              Rooted in Qatar's Real-World Operational Needs
+            </h2>
+            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+              In bustling metropolitan Doha, logistics couriers and delivery drivers frequently lose valuable hours hunting for functional cash deposit machines (COD/CDM) after bank closures to deposit daily cash collections. To solve this, R &amp; L Studio engineered <strong>COD Finder</strong>, delivering instantaneous turn-by-turn navigation, operational uptime tracking, and offline geolocation caching.
+            </p>
+            <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+              Similarly, consumers seeking payment machines across municipalities in Qatar faced inconsistent directory data. We developed <strong>iPay Finder</strong> to bridge this gap, integrating clean Arabic and English bilingual UX, real-time database syncing, and location routing.
+            </p>
+            <div class="pt-2">
+              <a href="portfolio.html" class="text-sm font-bold text-blue-600 dark:text-blue-400 hover:underline">
+                Explore these 2 flagship apps in our Portfolio &rarr;
+              </a>
+            </div>
+          </div>
+
+          <div class="lg:col-span-6">
+            <div class="rounded-2xl overflow-hidden shadow-xl border border-slate-200 dark:border-slate-800 bg-slate-900">
+              <img
+                src="images/hero.jpg"
+                alt="R & L Studio Operations in Doha"
+                class="w-full h-auto object-cover aspect-video"
+                loading="lazy"
+                onerror="this.onerror=null; this.src='images/Cod Finder Main Screen.jpg';"
+              />
+              <div class="p-6 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
+                <div class="text-xs uppercase tracking-wider font-bold text-blue-600 dark:text-blue-400">Doha Operations Center</div>
+                <div class="text-base font-bold text-slate-900 dark:text-white mt-1">West Bay Financial District, Doha, State of Qatar</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Founder Spotlight -->
+        <section class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 sm:p-12 shadow-sm">
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            <div class="md:col-span-4 flex justify-center">
+              <div class="relative w-48 h-48 sm:w-56 sm:h-56 rounded-2xl overflow-hidden shadow-xl border-2 border-blue-500/20">
+                <img
+                  src="images/founder.jpg"
+                  alt="Lead Mobile Systems Architect"
+                  class="w-full h-full object-cover"
+                  loading="lazy"
+                  onerror="this.onerror=null; this.src='images/founder_avatar_1791024815459.jpg';"
+                />
+              </div>
+            </div>
+            <div class="md:col-span-8 space-y-4">
+              <div class="text-xs font-mono text-emerald-600 dark:text-emerald-400 font-semibold uppercase tracking-wider">
+                Founder &amp; Principal Systems Architect
+              </div>
+              <h2 class="text-2xl sm:text-3xl font-bold font-display text-slate-900 dark:text-white">
+                Software Engineering &amp; Cross-Platform Architecture
+              </h2>
+              <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                With deep specialization in <strong>Android Studio</strong>, <strong>VS Studio</strong>, <strong>Flutter &amp; Dart</strong>, and cloud-native <strong>Supabase</strong> backends, our lead architect directs every product from initial architectural blueprint to production deployment.
+              </p>
+              <div class="flex flex-wrap gap-2 pt-2">
+                <span class="px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 font-mono text-xs font-bold text-blue-600">Android Studio</span>
+                <span class="px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 font-mono text-xs font-bold text-blue-600">VS Studio</span>
+                <span class="px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 font-mono text-xs font-bold text-emerald-600">Flutter / Dart</span>
+                <span class="px-3 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 font-mono text-xs font-bold text-indigo-600">Supabase &amp; RLS</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Studio Values (Three Pillars) -->
+        <section>
+          <div class="text-center max-w-2xl mx-auto mb-12">
+            <div class="text-xs uppercase tracking-widest font-semibold text-blue-600 dark:text-blue-400 mb-2">Our Foundation</div>
+            <h2 class="text-3xl font-bold font-display text-slate-900 dark:text-white">The Three Pillars of R &amp; L Studio</h2>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+              <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 flex items-center justify-center font-bold text-lg">⚡</div>
+              <h3 class="text-xl font-bold font-display text-slate-900 dark:text-white">Fluid Performance</h3>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Zero lag, 60fps native compilation, and sub-100ms database roundtrips. Every app is profiled extensively on real Android hardware.
+              </p>
+            </div>
+
+            <div class="p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 flex items-center justify-center font-bold text-lg">🛡️</div>
+              <h3 class="text-xl font-bold font-display text-slate-900 dark:text-white">Strict Security</h3>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                PostgreSQL Row Level Security (RLS), encrypted tokens, cryptographic signing, and GDPR / Qatar privacy compliance.
+              </p>
+            </div>
+
+            <div class="p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+              <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 flex items-center justify-center font-bold text-lg">✨</div>
+              <h3 class="text-xl font-bold font-display text-slate-900 dark:text-white">Human-Centric UX</h3>
+              <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Thoughtful dark/light modes, seamless Arabic Right-to-Left (RTL) localization, and accessible touch targets designed for field operators.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Compliant AdSense Banner Placement -->
+        <div class="my-12 adsense-container rounded-xl border border-dashed border-slate-300 dark:border-slate-700 p-4 text-center bg-slate-100/50 dark:bg-slate-900/50">
+          <div class="text-[11px] uppercase tracking-wider font-semibold text-slate-400 dark:text-slate-500 mb-2">Advertisement</div>
+          <div class="flex items-center justify-center min-h-[90px] text-xs text-slate-500 dark:text-slate-400">
+            <span>Google AdSense Responsive Unit (728x90)</span>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         FOOTER WITH LEGAL LINKS
+         ==================================================================== -->
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-10">
+        <div class="md:col-span-2 space-y-3">
+          <div class="flex items-center gap-3">
+            <img
+              src="images/logo.png"
+              alt="R & L Studio Logo"
+              class="w-9 h-9 rounded-lg object-contain border border-slate-200 dark:border-slate-800"
+              onerror="this.onerror=null; this.src='images/logo.svg';"
+            />
+            <div class="text-xl font-bold font-display text-slate-900 dark:text-white">R &amp; L Studio</div>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-sm leading-relaxed">
+            Android Mobile Developer (VS Studio - Android Studio) in Doha, Qatar. Engineering scalable Flutter &amp; Supabase apps.
+          </p>
+          <div class="text-xs text-slate-500 dark:text-slate-400 space-y-1 pt-1">
+            <div>Email: <a href="mailto:rlstudiox90@gmail.com" class="text-blue-600 dark:text-blue-400 font-semibold hover:underline">rlstudiox90@gmail.com</a></div>
+            <div>Contact: <a href="https://wa.me/97430854376" class="text-emerald-600 font-semibold hover:underline">+974-3085-4376</a></div>
+            <div>Location: West Bay, Doha, State of Qatar</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-3">Pages</div>
+          <ul class="space-y-2 text-xs text-slate-600 dark:text-slate-400 font-medium">
+            <li><a href="index.html" class="hover:text-blue-600 transition">Home</a></li>
+            <li><a href="portfolio.html" class="hover:text-blue-600 transition">Apps &amp; Portfolio (5)</a></li>
+            <li><a href="about.html" class="text-blue-600 dark:text-blue-400 font-bold">About Studio</a></li>
+            <li><a href="contact.html" class="hover:text-blue-600 transition">Contact &amp; Map</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-3">Legal &amp; Trust</div>
+          <ul class="space-y-2 text-xs text-slate-600 dark:text-slate-400 font-medium">
+            <li><a href="privacy.html" class="hover:text-blue-600 transition">Privacy Policy (AdSense Compliant)</a></li>
+            <li><a href="terms.html" class="hover:text-blue-600 transition">Terms &amp; Conditions</a></li>
+            <li><a href="contact.html" class="hover:text-blue-600 transition">Support &amp; Inquiries</a></li>
+            <li><span class="text-slate-400">Governing Law: State of Qatar</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-3">
+        <div>&copy; <span id="year"></span> R &amp; L Studio. All rights reserved. Registered in Doha, Qatar.</div>
+        <div class="flex items-center gap-4 text-[11px]">
+          <span>Android Studio</span>
+          <span>·</span>
+          <span>VS Studio</span>
+          <span>·</span>
+          <span>Flutter &amp; Supabase</span>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // Theme toggle
+      const themeToggle = document.getElementById('themeToggle');
+      const root = document.documentElement;
+      if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+      }
+      themeToggle?.addEventListener('click', () => {
+        root.classList.toggle('dark');
+        localStorage.setItem('theme', root.classList.contains('dark') ? 'dark' : 'light');
+      });
+
+      // Mobile Menu Drawer Toggle
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const mobileDrawer = document.getElementById('mobileDrawer');
+      mobileMenuBtn?.addEventListener('click', () => {
+        mobileDrawer?.classList.toggle('hidden');
+      });
+      mobileDrawer?.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => mobileDrawer.classList.add('hidden'));
+      });
+    </script>
+  </body>
+</html>

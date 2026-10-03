@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Terms &amp; Conditions | R &amp; L Studio - Doha, Qatar</title>
+    <meta
+      name="description"
+      content="Official Terms &amp; Conditions for R &amp; L Studio web and mobile applications in Doha, Qatar."
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://randlstudio.netlify.app/terms.html" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS CDN & Config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['Outfit', 'sans-serif'],
+              sans: ['Plus Jakarta Sans', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            }
+          }
+        }
+      }
+    </script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-200 min-h-screen flex flex-col justify-between">
+    
+    <!-- ====================================================================
+         1. HEADER & NAVIGATION (MULTI-PAGE ROUTING)
+         ==================================================================== -->
+    <header class="sticky top-0 z-40 header-glass">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        
+        <!-- Brand Identity with Logo -->
+        <a href="index.html" class="flex items-center gap-3 group text-left">
+          <img
+            src="images/logo.png"
+            alt="R & L Studio Logo"
+            class="w-11 h-11 rounded-xl object-contain shadow-sm border border-slate-200/80 dark:border-slate-800"
+            onerror="this.onerror=null; this.src='images/logo.svg';"
+          />
+          <div>
+            <div class="text-xl sm:text-2xl font-extrabold tracking-tight font-display text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors leading-none">
+              R &amp; L Studio
+            </div>
+            <div class="text-[11px] font-mono text-slate-500 dark:text-slate-400 mt-1 truncate max-w-[200px] sm:max-w-none">
+              Android Mobile Developer (VS Studio - Android Studio)
+            </div>
+          </div>
+        </a>
+
+        <!-- Desktop Multi-Page Navigation Links -->
+        <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600 dark:text-slate-300">
+          <a href="index.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</a>
+          <a href="portfolio.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Apps &amp; Portfolio</a>
+          <a href="about.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About Us</a>
+          <a href="contact.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Contact</a>
+        </nav>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-3">
+          <button id="themeToggle" type="button" aria-label="Toggle visual theme" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <svg id="sunIcon" class="w-4 h-4 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <svg id="moonIcon" class="w-4 h-4 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          </button>
+
+          <a
+            href="contact.html"
+            class="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition-all whitespace-nowrap"
+          >
+            <span>Inquire</span>
+          </a>
+
+          <button id="mobileMenuBtn" type="button" aria-label="Toggle navigation drawer" class="md:hidden p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Dropdown Drawer -->
+      <div id="mobileDrawer" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-6 space-y-4 shadow-lg">
+        <a href="index.html" class="block font-semibold text-base py-1.5 text-slate-800 dark:text-slate-100 hover:text-blue-600">Home</a>
+        <a href="portfolio.html" class="block font-semibold text-base py-1.5 text-slate-800 dark:text-slate-100 hover:text-blue-600">Apps &amp; Portfolio (5)</a>
+        <a href="about.html" class="block font-semibold text-base py-1.5 text-slate-800 dark:text-slate-100 hover:text-blue-600">About Studio</a>
+        <a href="contact.html" class="block font-semibold text-base py-1.5 text-slate-800 dark:text-slate-100 hover:text-blue-600">Contact Us</a>
+      </div>
+    </header>
+
+    <main class="py-16 md:py-24 flex-1">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Header -->
+        <div class="border-b border-slate-200 dark:border-slate-800 pb-8 mb-10">
+          <div class="text-xs uppercase tracking-widest font-semibold text-blue-600 dark:text-blue-400 mb-2">
+            Legal &amp; Operational Agreement
+          </div>
+          <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight font-display text-slate-900 dark:text-white mb-3">
+            Terms &amp; Conditions
+          </h1>
+          <div class="flex flex-wrap items-center gap-3 text-xs text-slate-500 font-mono">
+            <span>Last Updated: October 2026</span>
+            <span>·</span>
+            <span>R &amp; L Studio · Doha, State of Qatar</span>
+          </div>
+        </div>
+
+        <!-- Terms Content -->
+        <div class="space-y-10 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+          
+          <section class="space-y-3">
+            <h2 class="text-xl font-bold font-display text-slate-900 dark:text-white">
+              1. Acceptance of Terms
+            </h2>
+            <p>
+              By accessing and using this website (<a href="https://randlstudio.netlify.app" class="text-blue-600 underline">https://randlstudio.netlify.app</a>) or downloading/using applications engineered by <strong>R &amp; L Studio</strong>, you agree to comply with and be bound by these Terms and Conditions. If you do not agree with any part of these terms, please discontinue use immediately.
+            </p>
+          </section>
+
+          <section class="space-y-3">
+            <h2 class="text-xl font-bold font-display text-slate-900 dark:text-white">
+              2. Intellectual Property Rights
+            </h2>
+            <p>
+              All original content, application code, software architectures, user interface designs, logos, screenshots, and visual branding (including "R &amp; L Studio", "COD Finder", "iPay Finder", "PDFORA", "Zonix Ride", and "BazarPulse") are the exclusive intellectual property of R &amp; L Studio.
+            </p>
+            <p>
+              You may not modify, reproduce, decompile, or distribute any proprietary materials without prior written consent from R &amp; L Studio.
+            </p>
+          </section>
+
+          <section class="space-y-3">
+            <h2 class="text-xl font-bold font-display text-slate-900 dark:text-white">
+              3. Service Availability &amp; Disclaimer of Warranties
+            </h2>
+            <p>
+              Our applications and website are provided on an "as is" and "as available" basis. While we strive for continuous 99.9% uptime across our Supabase cloud connections and accurate turn-by-turn map calculations in Doha, Qatar, we do not warrant that operation will be uninterrupted, error-free, or that machine locations will never change without notice.
+            </p>
+          </section>
+
+          <section class="space-y-3">
+            <h2 class="text-xl font-bold font-display text-slate-900 dark:text-white">
+              4. Limitation of Liability
+            </h2>
+            <p>
+              To the fullest extent permitted by applicable law in the State of Qatar, R &amp; L Studio shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising out of your access to, use of, or inability to use our applications or services.
+            </p>
+          </section>
+
+          <section class="space-y-3">
+            <h2 class="text-xl font-bold font-display text-slate-900 dark:text-white">
+              5. Governing Law &amp; Jurisdiction
+            </h2>
+            <p>
+              These Terms and Conditions and any dispute or claim arising out of or in connection with them shall be governed by and construed in accordance with the substantive laws of the <strong>State of Qatar</strong>. The competent courts in Doha, Qatar shall have exclusive jurisdiction.
+            </p>
+          </section>
+
+          <section class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">
+            <h3 class="text-base font-bold text-slate-900 dark:text-white">Contact for Legal Inquiries</h3>
+            <p class="text-xs">R &amp; L Studio Operations &amp; Legal</p>
+            <p class="text-xs font-mono text-blue-600 dark:text-blue-400">Email: rlstudiox90@gmail.com</p>
+            <p class="text-xs font-mono text-emerald-600 dark:text-emerald-400">Phone: +974-3085-4376</p>
+            <p class="text-xs text-slate-500">Registered Office: West Bay, Doha, State of Qatar</p>
+          </section>
+
+        </div>
+
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         FOOTER WITH LEGAL LINKS
+         ==================================================================== -->
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-10">
+        <div class="md:col-span-2 space-y-3">
+          <div class="flex items-center gap-3">
+            <img
+              src="images/logo.png"
+              alt="R & L Studio Logo"
+              class="w-9 h-9 rounded-lg object-contain border border-slate-200 dark:border-slate-800"
+              onerror="this.onerror=null; this.src='images/logo.svg';"
+            />
+            <div class="text-xl font-bold font-display text-slate-900 dark:text-white">R &amp; L Studio</div>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-sm leading-relaxed">
+            Android Mobile Developer (VS Studio - Android Studio) in Doha, Qatar.
+          </p>
+          <div class="text-xs text-slate-500 dark:text-slate-400 space-y-1 pt-1">
+            <div>Email: <a href="mailto:rlstudiox90@gmail.com" class="text-blue-600 dark:text-blue-400 font-semibold hover:underline">rlstudiox90@gmail.com</a></div>
+            <div>Contact: <a href="https://wa.me/97430854376" class="text-emerald-600 font-semibold hover:underline">+974-3085-4376</a></div>
+            <div>Location: West Bay, Doha, State of Qatar</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-3">Pages</div>
+          <ul class="space-y-2 text-xs text-slate-600 dark:text-slate-400 font-medium">
+            <li><a href="index.html" class="hover:text-blue-600 transition">Home</a></li>
+            <li><a href="portfolio.html" class="hover:text-blue-600 transition">Apps &amp; Portfolio (5)</a></li>
+            <li><a href="about.html" class="hover:text-blue-600 transition">About Studio</a></li>
+            <li><a href="contact.html" class="hover:text-blue-600 transition">Contact &amp; Map</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <div class="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-3">Legal &amp; Trust</div>
+          <ul class="space-y-2 text-xs text-slate-600 dark:text-slate-400 font-medium">
+            <li><a href="privacy.html" class="hover:text-blue-600 transition">Privacy Policy</a></li>
+            <li><a href="terms.html" class="text-blue-600 dark:text-blue-400 font-bold">Terms &amp; Conditions</a></li>
+            <li><a href="contact.html" class="hover:text-blue-600 transition">Support &amp; Inquiries</a></li>
+            <li><span class="text-slate-400">Governing Law: State of Qatar</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-3">
+        <div>&copy; <span id="year"></span> R &amp; L Studio. All rights reserved. Registered in Doha, Qatar.</div>
+        <div class="flex items-center gap-4 text-[11px]">
+          <span>Android Studio</span>
+          <span>·</span>
+          <span>VS Studio</span>
+          <span>·</span>
+          <span>Flutter &amp; Supabase</span>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+      const themeToggle = document.getElementById('themeToggle');
+      const root = document.documentElement;
+      if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+      }
+      themeToggle?.addEventListener('click', () => {
+        root.classList.toggle('dark');
+        localStorage.setItem('theme', root.classList.contains('dark') ? 'dark' : 'light');
+      });
+
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const mobileDrawer = document.getElementById('mobileDrawer');
+      mobileMenuBtn?.addEventListener('click', () => {
+        mobileDrawer?.classList.toggle('hidden');
+      });
+      mobileDrawer?.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => mobileDrawer.classList.add('hidden'));
+      });
+    </script>
+  </body>
+</html>
