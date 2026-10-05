@@ -1,13 +1,16 @@
 /**
  * ==============================================================================
- * R & L STUDIO - SUPABASE CLIENT INTEGRATION
+ * R & L STUDIO - SUPABASE CLIENT & AUTH INTEGRATION
  * ==============================================================================
  * Backend Credentials:
  * Project URL: https://xwhugayxrizbiaqndycl.supabase.co
  * Anon Key: sb_publishable_ilMx2ttvWxmZMJQatWeCAg_M6-GTHSd
+ * Auth Providers: Google OAuth, Email/Password
  * Target Table: contact_messages
  * ==============================================================================
  */
+
+import { createClient } from "@supabase/supabase-js";
 
 export const SUPABASE_CONFIG = {
   url: "https://xwhugayxrizbiaqndycl.supabase.co",
@@ -21,9 +24,7 @@ export function getSupabaseConfig() {
 let supabaseInstance = null;
 
 /**
- * Initializes and returns the Supabase client.
- * Uses window.supabase from CDN (@supabase/supabase-js v2)
- * with graceful HTTP REST fallback.
+ * Initializes and returns the Supabase client with full Auth and Database support.
  */
 export function getSupabaseClient() {
   if (supabaseInstance) {
@@ -32,14 +33,41 @@ export function getSupabaseClient() {
 
   const { url, anonKey } = SUPABASE_CONFIG;
 
-  // 1. If Supabase CDN is loaded on the page
+  // 1. Check window.supabase from CDN if present
   if (typeof window !== "undefined" && window.supabase && typeof window.supabase.createClient === "function") {
-    supabaseInstance = window.supabase.createClient(url, anonKey);
+    supabaseInstance = window.supabase.createClient(url, anonKey, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    });
     return supabaseInstance;
   }
 
-  // 2. Direct REST API Fallback
+  // 2. Bundled @supabase/supabase-js client
+  if (typeof createClient === "function") {
+    supabaseInstance = createClient(url, anonKey, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    });
+    return supabaseInstance;
+  }
+
+  // 3. Fallback mock/REST
   supabaseInstance = {
+    auth: {
+      signInWithOAuth: async () => ({ data: null, error: new Error("Auth client unavailable") }),
+      signInWithPassword: async () => ({ data: null, error: new Error("Auth client unavailable") }),
+      signUp: async () => ({ data: null, error: new Error("Auth client unavailable") }),
+      signOut: async () => ({ error: null }),
+      getSession: async () => ({ data: { session: null }, error: null }),
+      getUser: async () => ({ data: { user: null }, error: null }),
+      onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } })
+    },
     from: (tableName) => ({
       insert: async (records) => {
         try {
@@ -53,12 +81,10 @@ export function getSupabaseClient() {
             },
             body: JSON.stringify(records)
           });
-
           if (!response.ok) {
             const errData = await response.json().catch(() => ({}));
-            throw new Error(errData.message || `Supabase HTTP ${response.status}: ${response.statusText}`);
+            throw new Error(errData.message || `HTTP ${response.status}: ${response.statusText}`);
           }
-
           return { data: records, error: null };
         } catch (err) {
           return { data: null, error: err };
@@ -70,20 +96,124 @@ export function getSupabaseClient() {
   return supabaseInstance;
 }
 
+/* ==========================================================================
+   AUTHENTICATION FUNCTIONS
+   ========================================================================== */
+
+/**
+ * Initiates Google OAuth sign-in via Supabase.
+ */
+export async function signInWithGoogle() {
+  const client = getSupabaseClient();
+  if (!client || !client.auth) {
+    throw new Error("Supabase auth is not initialized");
+  }
+
+  // Use current page URL without hash for OAuth redirect
+  const redirectOrigin = typeof window !== "undefined" ? window.location.origin + window.location.pathname : "";
+  
+  const { data, error } = await client.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: redirectOrigin,
+      queryParams: {
+        access_type: "offline",
+        prompt: "consent"
+      }
+    }
+  });
+
+  if (error) throw error;
+  return data;
+}
+
+/**
+ * Signs in with Email and Password.
+ */
+export async function signInWithEmail(email, password) {
+  const client = getSupabaseClient();
+  if (!client || !client.auth) {
+    throw new Error("Supabase auth is not initialized");
+  }
+
+  const { data, error } = await client.auth.signInWithPassword({
+    email: email.trim().toLowerCase(),
+    password
+  });
+
+  if (error) throw error;
+  return data;
+}
+
+/**
+ * Signs up a new user with Email and Password.
+ */
+export async function signUpWithEmail(email, password) {
+  const client = getSupabaseClient();
+  if (!client || !client.auth) {
+    throw new Error("Supabase auth is not initialized");
+  }
+
+  const redirectOrigin = typeof window !== "undefined" ? window.location.origin + window.location.pathname : "";
+
+  const { data, error } = await client.auth.signUp({
+    email: email.trim().toLowerCase(),
+    password,
+    options: {
+      emailRedirectTo: redirectOrigin
+    }
+  });
+
+  if (error) throw error;
+  return data;
+}
+
+/**
+ * Signs out current user session.
+ */
+export async function signOutUser() {
+  const client = getSupabaseClient();
+  if (!client || !client.auth) {
+    throw new Error("Supabase auth is not initialized");
+  }
+
+  const { error } = await client.auth.signOut();
+  if (error) throw error;
+  return true;
+}
+
+/**
+ * Retrieves current active session.
+ */
+export async function getSession() {
+  const client = getSupabaseClient();
+  if (!client || !client.auth) return null;
+  const { data, error } = await client.auth.getSession();
+  if (error) return null;
+  return data.session;
+}
+
+/**
+ * Subscribes to auth state changes (SIGNED_IN, SIGNED_OUT, etc.)
+ */
+export function onAuthStateChange(callback) {
+  const client = getSupabaseClient();
+  if (!client || !client.auth) return { unsubscribe: () => {} };
+  
+  const { data } = client.auth.onAuthStateChange((event, session) => {
+    callback(event, session);
+  });
+  return data.subscription;
+}
+
+/* ==========================================================================
+   DATABASE / CONTACT FORM FUNCTIONS
+   ========================================================================== */
+
 /**
  * Submits contact form data to the 'contact_messages' table in Supabase.
- * @param {Object} formData
- * @param {string} formData.name - Sender name
- * @param {string} formData.email - Sender email
- * @param {string} formData.subject - Subject line
- * @param {string} formData.message - Message body
- * @param {string} [formData.phone] - Sender contact number
- * @param {string} [formData.project_type] - Project type
- * @param {string} [formData.budget_range] - Budget range
- * @returns {Promise<{success: boolean, message: string, data?: any, error?: any}>}
  */
 export async function submitContactForm(formData) {
-  // Input Validation
   if (!formData.name || !formData.name.trim()) {
     return { success: false, message: "Please enter your name." };
   }
@@ -141,11 +271,17 @@ export async function submitContactForm(formData) {
   }
 }
 
-// Global attachment for vanilla HTML
+// Global attachment for plain script tags
 if (typeof window !== "undefined") {
   window.RL_Studio_Supabase = {
     getSupabaseConfig,
     getSupabaseClient,
+    signInWithGoogle,
+    signInWithEmail,
+    signUpWithEmail,
+    signOutUser,
+    getSession,
+    onAuthStateChange,
     submitContactForm
   };
 }
@@ -153,5 +289,11 @@ if (typeof window !== "undefined") {
 export default {
   getSupabaseConfig,
   getSupabaseClient,
+  signInWithGoogle,
+  signInWithEmail,
+  signUpWithEmail,
+  signOutUser,
+  getSession,
+  onAuthStateChange,
   submitContactForm
 };

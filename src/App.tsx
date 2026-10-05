@@ -24,9 +24,21 @@ import {
   Database,
   Calculator,
   Compass,
-  FileText
+  FileText,
+  LogIn,
+  User,
+  LogOut
 } from 'lucide-react';
-import { submitContactForm, getSupabaseConfig } from '../js/supabase.js';
+import {
+  submitContactForm,
+  getSupabaseConfig,
+  signInWithGoogle,
+  signInWithEmail,
+  signUpWithEmail,
+  signOutUser,
+  getSession,
+  onAuthStateChange
+} from '../js/supabase.js';
 import { projectsData } from '../js/projects-data.js';
 
 // Types
@@ -98,6 +110,18 @@ export default function App() {
   const [supabaseConfigModalOpen, setSupabaseConfigModalOpen] = useState<boolean>(false);
   const [copiedCodeId, setCopiedCodeId] = useState<string | null>(null);
 
+  // Splash Screen State
+  const [splashVisible, setSplashVisible] = useState<boolean>(true);
+
+  // Supabase Authentication Modal State
+  const [authModalOpen, setAuthModalOpen] = useState<boolean>(false);
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
+  const [authEmail, setAuthEmail] = useState<string>('');
+  const [authPassword, setAuthPassword] = useState<string>('');
+  const [authLoading, setAuthLoading] = useState<boolean>(false);
+  const [authFeedback, setAuthFeedback] = useState<{ type: 'error' | 'success' | 'info'; text: string } | null>(null);
+
   // Quote Calculator State
   const [quotePlatforms, setQuotePlatforms] = useState<string[]>(['iOS', 'Android']);
   const [quoteFeatures, setQuoteFeatures] = useState<string[]>([
@@ -157,8 +181,82 @@ export default function App() {
     if (savedUrl) setCustomSupabaseUrl(savedUrl);
     if (savedKey) setCustomSupabaseKey(savedKey);
 
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    // Auto-dismiss splash screen
+    const splashTimer = setTimeout(() => {
+      setSplashVisible(false);
+    }, 600);
+
+    // Initial Supabase session check
+    getSession().then((session) => {
+      if (session?.user) setCurrentUser(session.user);
+    }).catch(() => {});
+
+    // Subscribe to auth state updates
+    const sub = onAuthStateChange((_event: any, session: any) => {
+      setCurrentUser(session?.user || null);
+    });
+
+    return () => {
+      clearTimeout(splashTimer);
+      window.removeEventListener('hashchange', handleHashChange);
+      if (sub?.unsubscribe) sub.unsubscribe();
+    };
   }, []);
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setAuthFeedback({ type: 'info', text: 'Redirecting to Google OAuth...' });
+      await signInWithGoogle();
+    } catch (err: any) {
+      setAuthFeedback({ type: 'error', text: err.message || 'Google Sign-In failed.' });
+    }
+  };
+
+  const handleEmailAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!authEmail || !authPassword) {
+      setAuthFeedback({ type: 'error', text: 'Please fill in both email and password.' });
+      return;
+    }
+    if (authPassword.length < 6) {
+      setAuthFeedback({ type: 'error', text: 'Password must be at least 6 characters.' });
+      return;
+    }
+
+    setAuthLoading(true);
+    setAuthFeedback({ type: 'info', text: 'Connecting to Supabase...' });
+
+    try {
+      if (authMode === 'signup') {
+        const res = await signUpWithEmail(authEmail, authPassword);
+        if (res?.user && !res.session) {
+          setAuthFeedback({ type: 'success', text: 'Account created! Please check your email for confirmation.' });
+        } else {
+          setAuthFeedback({ type: 'success', text: 'Account registered and signed in!' });
+          setTimeout(() => setAuthModalOpen(false), 1200);
+        }
+      } else {
+        await signInWithEmail(authEmail, authPassword);
+        setAuthFeedback({ type: 'success', text: 'Signed in successfully!' });
+        setTimeout(() => setAuthModalOpen(false), 1000);
+      }
+    } catch (err: any) {
+      setAuthFeedback({ type: 'error', text: err.message || 'Authentication error.' });
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOutUser();
+      setCurrentUser(null);
+      setAuthFeedback({ type: 'info', text: 'Signed out successfully.' });
+      setTimeout(() => setAuthModalOpen(false), 800);
+    } catch (err: any) {
+      setAuthFeedback({ type: 'error', text: err.message || 'Error signing out.' });
+    }
+  };
 
   const toggleTheme = () => {
     const nextDark = !isDark;
@@ -290,8 +388,39 @@ export default function App() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col font-sans transition-colors duration-200">
       
       {/* ====================================================================
+          0. SLEEK DARK-THEMED SPLASH SCREEN / PRELOADER
+          ==================================================================== */}
+      {splashVisible && (
+        <div id="rlSplashScreen" aria-label="Loading R & L Studio">
+          <div className="flex flex-col items-center justify-center p-6 text-center max-w-sm">
+            <div className="relative mb-6">
+              <img
+                src="/images/logo.svg"
+                alt="R & L Studio Logo"
+                className="w-20 h-20 rounded-2xl shadow-2xl border-2 border-blue-500/40 splash-logo-glow"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = '/images/logo.png';
+                }}
+              />
+              <div className="absolute -inset-2 rounded-3xl bg-blue-500/20 blur-xl -z-10 animate-pulse"></div>
+            </div>
+            <div className="text-2xl sm:text-3xl font-extrabold tracking-tight font-display text-white mb-1.5">
+              R &amp; L Studio
+            </div>
+            <div className="text-xs font-mono text-blue-400 mb-6 tracking-wide">
+              Android Mobile Developer · Doha, Qatar
+            </div>
+            <div className="splash-spinner mb-4" role="status" aria-label="Loading"></div>
+            <span className="text-[11px] font-mono text-slate-400 uppercase tracking-widest">
+              Loading Systems...
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* ====================================================================
           TOP BAR CONTRACT: [Brand Wordmark] - [4-6 Nav Links] - [Primary Actions]
-      ==================================================================== */}
+          ==================================================================== */}
       <header className="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           
@@ -347,14 +476,38 @@ export default function App() {
             </button>
           </nav>
 
-          {/* Zone 3: Primary Actions (Theme Toggle, Supabase Settings, Quote Button) */}
+          {/* Zone 3: Primary Actions (Sign In, Theme Toggle, Supabase Settings, Quote Button) */}
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* Sign In Button */}
+            <button
+              onClick={() => {
+                setAuthFeedback(null);
+                setAuthModalOpen(true);
+              }}
+              title="Studio Authentication"
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 rounded-lg transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
+            >
+              {currentUser ? (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span className="truncate max-w-[100px] sm:max-w-[130px]">
+                    {currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0] || 'Studio User'}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <LogIn className="w-3.5 h-3.5" />
+                  <span>Sign In</span>
+                </>
+              )}
+            </button>
+
             {/* Supabase Config button */}
             <button
               onClick={() => setSupabaseConfigModalOpen(true)}
               title="Configure Supabase Database Keys"
               aria-label="Supabase settings"
-              className="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-xs flex items-center gap-1.5"
+              className="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-xs flex items-center gap-1.5 cursor-pointer"
             >
               <Database className="w-4 h-4 text-emerald-500" />
               <span className="hidden lg:inline text-xs font-mono">DB Config</span>
@@ -364,7 +517,7 @@ export default function App() {
             <button
               onClick={toggleTheme}
               aria-label="Toggle visual theme"
-              className="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
             >
               {isDark ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
             </button>
@@ -423,6 +576,17 @@ export default function App() {
               Hosting &amp; Code Exporter
             </button>
             <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-3">
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setAuthFeedback(null);
+                  setAuthModalOpen(true);
+                }}
+                className="w-full py-2.5 flex items-center justify-center gap-2 text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer"
+              >
+                <LogIn className="w-4 h-4" />
+                <span>{currentUser ? currentUser.email : 'Sign In / Studio Account'}</span>
+              </button>
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
@@ -831,7 +995,7 @@ export default function App() {
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           target.onerror = null;
-                          target.src = '/images/founder.jpg';
+                          target.src = '/images/logo.svg';
                         }}
                       />
                     </div>
@@ -1676,6 +1840,188 @@ WITH CHECK (
           &copy; {new Date().getFullYear()} R &amp; L Studio. All rights reserved. Registered in Doha, Qatar.
         </div>
       </footer>
+
+      {/* ====================================================================
+          MODAL: SUPABASE AUTHENTICATION (GOOGLE OAUTH & EMAIL/PASSWORD)
+      ==================================================================== */}
+      {authModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setAuthModalOpen(false);
+          }}
+        >
+          <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 relative">
+            {/* Header */}
+            <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800 mb-6">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-600/10 dark:bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                  <LogIn className="w-5 h-5" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-bold font-display text-slate-900 dark:text-white">
+                    Studio Account
+                  </h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Powered by Supabase Authentication
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setAuthModalOpen(false)}
+                className="p-2 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+                aria-label="Close modal"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Profile / Logged In State */}
+            {currentUser ? (
+              <div className="space-y-6 text-center py-4">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-blue-600 to-emerald-500 mx-auto flex items-center justify-center text-white text-2xl font-bold shadow-lg shadow-blue-500/25">
+                  <User className="w-8 h-8" />
+                </div>
+                <div>
+                  <div className="text-xs uppercase tracking-wider font-semibold text-emerald-600 dark:text-emerald-400 font-mono mb-1">
+                    Currently Signed In
+                  </div>
+                  <div className="text-base font-bold text-slate-900 dark:text-white">
+                    {currentUser.email}
+                  </div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                    R &amp; L Studio Developer Access
+                  </div>
+                </div>
+                {authFeedback && (
+                  <div className={`text-xs font-medium py-1 ${authFeedback.type === 'error' ? 'text-red-500' : 'text-emerald-500'}`}>
+                    {authFeedback.text}
+                  </div>
+                )}
+                <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+                  <button
+                    onClick={handleSignOut}
+                    className="w-full py-2.5 px-4 rounded-xl text-xs font-bold text-red-600 hover:text-white hover:bg-red-600 border border-red-200 dark:border-red-900/50 transition cursor-pointer flex items-center justify-center gap-2"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Sign Out of Studio</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              /* Unauthenticated Form State */
+              <div className="space-y-5">
+                {/* Tabs */}
+                <div className="flex border-b border-slate-200 dark:border-slate-800 text-xs font-bold">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAuthMode('signin');
+                      setAuthFeedback(null);
+                    }}
+                    className={`flex-1 pb-2.5 border-b-2 transition cursor-pointer ${
+                      authMode === 'signin'
+                        ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+                        : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                    }`}
+                  >
+                    Sign In
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAuthMode('signup');
+                      setAuthFeedback(null);
+                    }}
+                    className={`flex-1 pb-2.5 border-b-2 transition cursor-pointer ${
+                      authMode === 'signup'
+                        ? 'border-blue-600 text-blue-600 dark:text-blue-400'
+                        : 'border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'
+                    }`}
+                  >
+                    Create Account
+                  </button>
+                </div>
+
+                {/* Google OAuth Button */}
+                <button
+                  type="button"
+                  onClick={handleGoogleSignIn}
+                  className="w-full py-3 px-4 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-750 text-slate-800 dark:text-slate-100 text-xs font-bold flex items-center justify-center gap-3 shadow-sm hover:shadow transition cursor-pointer"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                  </svg>
+                  <span>Continue with Google</span>
+                </button>
+
+                {/* Divider */}
+                <div className="relative flex items-center justify-center my-3">
+                  <div className="w-full border-t border-slate-200 dark:border-slate-800"></div>
+                  <span className="absolute px-3 bg-white dark:bg-slate-900 text-[10px] font-mono uppercase tracking-wider text-slate-400">
+                    or with email
+                  </span>
+                </div>
+
+                {/* Form */}
+                <form onSubmit={handleEmailAuth} className="space-y-3.5">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                      Email Address
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      value={authEmail}
+                      onChange={(e) => setAuthEmail(e.target.value)}
+                      placeholder="name@domain.com"
+                      className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      required
+                      value={authPassword}
+                      onChange={(e) => setAuthPassword(e.target.value)}
+                      placeholder="••••••••"
+                      className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                    />
+                  </div>
+
+                  {authFeedback && (
+                    <div
+                      className={`text-xs font-medium py-1 ${
+                        authFeedback.type === 'error'
+                          ? 'text-red-500'
+                          : authFeedback.type === 'success'
+                          ? 'text-emerald-500'
+                          : 'text-blue-500'
+                      }`}
+                    >
+                      {authFeedback.text}
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={authLoading}
+                    className="w-full py-3 px-4 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md transition cursor-pointer disabled:opacity-50"
+                  >
+                    {authLoading ? 'Connecting...' : authMode === 'signup' ? 'Create Studio Account' : 'Sign In to Studio'}
+                  </button>
+                </form>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* ====================================================================
           MODAL: PROJECT CASE STUDY DETAILS

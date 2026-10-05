@@ -361,3 +361,89 @@ h1, h2, h3, h4, .font-display {
   justify-content: center;
   padding: 1rem;
 }
+
+/* ==========================================================================
+   R & L STUDIO - DARK-THEMED SPLASH SCREEN / PRELOADER
+   ========================================================================== */
+#rlSplashScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: radial-gradient(circle at 50% 40%, #0f172a 0%, #030712 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+#rlSplashScreen.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.splash-spinner {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 3px solid rgba(56, 189, 248, 0.15);
+  border-top-color: #38bdf8;
+  border-right-color: #34d399;
+  animation: splashSpin 0.85s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.25);
+}
+
+@keyframes splashSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.splash-logo-glow {
+  filter: drop-shadow(0 0 24px rgba(37, 99, 235, 0.45));
+}
+
+/* ==========================================================================
+   R & L STUDIO - SUPABASE AUTH MODAL
+   ========================================================================== */
+.auth-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: rgba(2, 6, 23, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.auth-modal-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.auth-modal-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 1.5rem;
+  max-width: 28rem;
+  width: 100%;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+  transform: scale(0.95);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  position: relative;
+}
+
+.auth-modal-backdrop.active .auth-modal-card {
+  transform: scale(1);
+}
+
