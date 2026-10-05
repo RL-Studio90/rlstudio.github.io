@@ -10,8 +10,6 @@
  * ==============================================================================
  */
 
-import { createClient } from "@supabase/supabase-js";
-
 export const SUPABASE_CONFIG = {
   url: "https://xwhugayxrizbiaqndycl.supabase.co",
   anonKey: "sb_publishable_ilMx2ttvWxmZMJQatWeCAg_M6-GTHSd"
@@ -22,6 +20,26 @@ export function getSupabaseConfig() {
 }
 
 let supabaseInstance = null;
+let dynamicCreateClient = null;
+
+// Dynamically resolve createClient from CDN if window.supabase is not loaded yet
+if (typeof window !== "undefined") {
+  if (window.supabase && typeof window.supabase.createClient === "function") {
+    dynamicCreateClient = window.supabase.createClient;
+  } else {
+    // Dynamic import from ESM CDN as progressive enhancement
+    import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm")
+      .then((mod) => {
+        if (mod && typeof mod.createClient === "function") {
+          dynamicCreateClient = mod.createClient;
+          if (!supabaseInstance) {
+            getSupabaseClient();
+          }
+        }
+      })
+      .catch(() => {});
+  }
+}
 
 /**
  * Initializes and returns the Supabase client with full Auth and Database support.
@@ -33,7 +51,7 @@ export function getSupabaseClient() {
 
   const { url, anonKey } = SUPABASE_CONFIG;
 
-  // 1. Check window.supabase from CDN if present
+  // 1. Check window.supabase from CDN script tag
   if (typeof window !== "undefined" && window.supabase && typeof window.supabase.createClient === "function") {
     supabaseInstance = window.supabase.createClient(url, anonKey, {
       auth: {
@@ -45,9 +63,9 @@ export function getSupabaseClient() {
     return supabaseInstance;
   }
 
-  // 2. Bundled @supabase/supabase-js client
-  if (typeof createClient === "function") {
-    supabaseInstance = createClient(url, anonKey, {
+  // 2. Check dynamicCreateClient
+  if (typeof dynamicCreateClient === "function") {
+    supabaseInstance = dynamicCreateClient(url, anonKey, {
       auth: {
         persistSession: true,
         autoRefreshToken: true,
@@ -57,7 +75,7 @@ export function getSupabaseClient() {
     return supabaseInstance;
   }
 
-  // 3. Fallback mock/REST
+  // 3. Fallback mock/REST client
   supabaseInstance = {
     auth: {
       signInWithOAuth: async () => ({ data: null, error: new Error("Auth client unavailable") }),
