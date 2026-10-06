@@ -187,6 +187,23 @@ export async function signUpWithEmail(email, password) {
 }
 
 /**
+ * Sends a password reset email via Supabase Auth.
+ */
+export async function resetPasswordForEmail(email) {
+  const client = getSupabaseClient();
+  if (!client || !client.auth) {
+    throw new Error("Supabase auth is not initialized");
+  }
+
+  const redirectOrigin = typeof window !== "undefined" ? window.location.origin + window.location.pathname : "";
+  const { data, error } = await client.auth.resetPasswordForEmail(email.trim().toLowerCase(), {
+    redirectTo: redirectOrigin
+  });
+  if (error) throw error;
+  return data;
+}
+
+/**
  * Signs out current user session.
  */
 export async function signOutUser() {
@@ -297,6 +314,7 @@ if (typeof window !== "undefined") {
     signInWithGoogle,
     signInWithEmail,
     signUpWithEmail,
+    resetPasswordForEmail,
     signOutUser,
     getSession,
     onAuthStateChange,
@@ -310,6 +328,7 @@ export default {
   signInWithGoogle,
   signInWithEmail,
   signUpWithEmail,
+  resetPasswordForEmail,
   signOutUser,
   getSession,
   onAuthStateChange,

@@ -9,10 +9,12 @@
  */
 
 import { projectsData } from './projects-data.js';
+import { liveWidgets } from './weather-clock.js';
 import {
   signInWithGoogle,
   signInWithEmail,
   signUpWithEmail,
+  resetPasswordForEmail,
   signOutUser,
   getSession,
   onAuthStateChange
@@ -21,38 +23,50 @@ import {
 /* ==========================================================================
    1. SPLASH SCREEN / PRELOADER CONTROLLER
    ========================================================================== */
-export function initSplashScreen() {
+export function initSplashScreen(onComplete) {
   const splash = document.getElementById('rlSplashScreen');
-  if (!splash) return;
+  let dismissed = false;
 
   const dismissSplash = () => {
-    if (!splash.classList.contains('fade-out')) {
+    if (dismissed) return;
+    dismissed = true;
+    if (splash && !splash.classList.contains('fade-out')) {
       splash.classList.add('fade-out');
       setTimeout(() => {
         splash.style.display = 'none';
-      }, 500);
+        if (typeof onComplete === 'function') onComplete();
+      }, 350);
+    } else {
+      if (typeof onComplete === 'function') onComplete();
     }
   };
 
-  // Dismiss when window load fires
+  if (!splash) {
+    if (typeof onComplete === 'function') onComplete();
+    return;
+  }
+
+  // Dismiss when window load fires or if DOM is ready
   if (document.readyState === 'complete') {
-    setTimeout(dismissSplash, 150);
+    setTimeout(dismissSplash, 80);
   } else {
-    window.addEventListener('load', () => setTimeout(dismissSplash, 200));
+    window.addEventListener('load', () => setTimeout(dismissSplash, 100));
   }
 
   // Safety fallback: Ensure splash screen never traps the user if network slows down
-  setTimeout(dismissSplash, 1500);
+  setTimeout(dismissSplash, 750);
 }
 
 /* ==========================================================================
-   2. SUPABASE AUTH MODAL & HEADER CONTROLLER
+   2. SUPABASE AUTH MODAL & HEADER CONTROLLER (WITH MANDATORY AUTH GATE)
    ========================================================================== */
 class AuthModalController {
   constructor() {
     this.modal = null;
     this.currentUser = null;
     this.mode = 'signin'; // 'signin' | 'signup' | 'profile'
+    this.isLockedGate = false;
+    this.hasCheckedAuth = false;
 
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => this.init());
@@ -69,6 +83,11 @@ class AuthModalController {
     this.authForm = document.getElementById('authEmailForm');
     this.emailInput = document.getElementById('authEmailInput');
     this.passwordInput = document.getElementById('authPasswordInput');
+    this.togglePasswordBtn = document.getElementById('togglePasswordBtn');
+    this.eyeIcon = document.getElementById('eyeIcon');
+    this.eyeOffIcon = document.getElementById('eyeOffIcon');
+    this.forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
+    this.lockBanner = document.getElementById('authLockBanner');
     this.submitBtn = document.getElementById('authSubmitBtn');
     this.tabSignIn = document.getElementById('tabSignIn');
     this.tabSignUp = document.getElementById('tabSignUp');
@@ -82,18 +101,75 @@ class AuthModalController {
     this.authBtns.forEach(btn => {
       btn.addEventListener('click', (e) => {
         e.preventDefault();
-        this.open();
+        this.open(false);
       });
     });
 
-    this.closeBtn?.addEventListener('click', () => this.close());
-    this.modal?.addEventListener('click', (e) => {
-      if (e.target === this.modal) this.close();
+    // Close button (only active when not locked or when authenticated)
+    this.closeBtn?.addEventListener('click', () => {
+      if (!this.isLockedGate || this.currentUser) {
+        this.close();
+      }
     });
 
+    // Backdrop click
+    this.modal?.addEventListener('click', (e) => {
+      if (e.target === this.modal) {
+        if (!this.isLockedGate || this.currentUser) {
+          this.close();
+        }
+      }
+    });
+
+    // Escape key
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && this.modal?.classList.contains('active')) {
-        this.close();
+        if (!this.isLockedGate || this.currentUser) {
+          this.close();
+        }
+      }
+    });
+
+    // Password Eye Toggle
+    this.togglePasswordBtn?.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (!this.passwordInput) return;
+      if (this.passwordInput.type === 'password') {
+        this.passwordInput.type = 'text';
+        this.eyeIcon?.classList.add('hidden');
+        this.eyeOffIcon?.classList.remove('hidden');
+      } else {
+        this.passwordInput.type = 'password';
+        this.eyeIcon?.classList.remove('hidden');
+        this.eyeOffIcon?.classList.add('hidden');
+      }
+    });
+
+    // Forgot Password Flow
+    this.forgotPasswordBtn?.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const email = this.emailInput?.value?.trim();
+      if (!email) {
+        this.showFeedback('Please enter your email address above to receive a password reset link.', 'info');
+        this.emailInput?.focus();
+        return;
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        this.showFeedback('Please enter a valid email address.', 'error');
+        this.emailInput?.focus();
+        return;
+      }
+      try {
+        this.setLoading(true);
+        this.showFeedback('Sending password reset email...', 'info');
+        await resetPasswordForEmail(email);
+        this.showFeedback(`Password reset email sent to ${email}! Check your inbox.`, 'success');
+        this.showToast(`Password reset link sent to ${email}`, 'success');
+      } catch (err) {
+        console.error('[Reset Password Error]', err);
+        this.showFeedback(err.message || 'Failed to send password reset email.', 'error');
+      } finally {
+        this.setLoading(false);
       }
     });
 
@@ -135,15 +211,20 @@ class AuthModalController {
           const data = await signUpWithEmail(email, password);
           if (data?.user && !data.session) {
             this.showFeedback('Verification email sent! Please check your inbox to confirm.', 'success');
+            this.showToast('Verification email sent! Check your inbox.', 'info');
           } else {
             this.showFeedback('Account created and signed in successfully!', 'success');
-            setTimeout(() => this.close(), 1200);
+            this.showToast('Studio Account created & signed in!', 'success');
+            this.unlockGate();
+            setTimeout(() => this.close(), 1000);
           }
         } else {
           this.showFeedback('Authenticating...', 'info');
           await signInWithEmail(email, password);
           this.showFeedback('Signed in successfully!', 'success');
-          setTimeout(() => this.close(), 1000);
+          this.showToast('Welcome to R & L Studio!', 'success');
+          this.unlockGate();
+          setTimeout(() => this.close(), 800);
         }
       } catch (err) {
         console.error('[Supabase Auth Error]', err);
@@ -157,32 +238,79 @@ class AuthModalController {
     this.signOutBtn?.addEventListener('click', async () => {
       try {
         await signOutUser();
+        this.currentUser = null;
+        this.updateUserState(null);
         this.showFeedback('Signed out successfully.', 'info');
-        setTimeout(() => this.close(), 800);
+        this.showToast('Signed out of Studio.', 'info');
+        setTimeout(() => {
+          this.lockGate();
+        }, 400);
       } catch (err) {
         this.showFeedback(err.message || 'Error signing out.', 'error');
       }
     });
 
-    // Check initial active session
+    // Subscribe to auth state updates
+    onAuthStateChange((event, session) => {
+      const user = session?.user || null;
+      this.updateUserState(user);
+      if (user) {
+        this.unlockGate();
+        if (this.modal?.classList.contains('active') && this.isLockedGate) {
+          this.close();
+        }
+      } else if (this.hasCheckedAuth) {
+        this.lockGate();
+      }
+    });
+  }
+
+  async checkAuthGate() {
+    this.hasCheckedAuth = true;
     try {
       const session = await getSession();
       if (session?.user) {
         this.updateUserState(session.user);
+        this.unlockGate();
+      } else {
+        this.updateUserState(null);
+        this.lockGate();
       }
-    } catch {
-      // Ignored
+    } catch (err) {
+      console.warn('[Auth Gate Check Failed]', err);
+      this.lockGate();
     }
+  }
 
-    // Subscribe to auth state updates
-    onAuthStateChange((event, session) => {
-      this.updateUserState(session?.user || null);
-    });
+  lockGate() {
+    this.isLockedGate = true;
+    document.body.classList.add('auth-locked');
+    document.documentElement.classList.add('auth-locked');
+    if (this.modal) this.modal.classList.add('locked');
+    if (this.closeBtn) this.closeBtn.style.display = 'none';
+    if (this.lockBanner) this.lockBanner.classList.remove('hidden');
+
+    this.open(true);
+  }
+
+  unlockGate() {
+    this.isLockedGate = false;
+    document.body.classList.remove('auth-locked');
+    document.documentElement.classList.remove('auth-locked');
+    if (this.modal) this.modal.classList.remove('locked');
+    if (this.closeBtn) this.closeBtn.style.display = '';
+    if (this.lockBanner) this.lockBanner.classList.add('hidden');
   }
 
   setMode(mode) {
     this.mode = mode;
     this.clearFeedback();
+
+    if (this.passwordInput) {
+      this.passwordInput.type = 'password';
+      this.eyeIcon?.classList.remove('hidden');
+      this.eyeOffIcon?.classList.add('hidden');
+    }
 
     if (mode === 'signup') {
       this.tabSignUp?.classList.add('border-blue-600', 'text-blue-600', 'dark:text-blue-400');
@@ -190,12 +318,14 @@ class AuthModalController {
       this.tabSignIn?.classList.remove('border-blue-600', 'text-blue-600', 'dark:text-blue-400');
       this.tabSignIn?.classList.add('border-transparent', 'text-slate-500');
       if (this.submitBtn) this.submitBtn.textContent = 'Create Studio Account';
+      if (this.forgotPasswordBtn) this.forgotPasswordBtn.style.display = 'none';
     } else {
       this.tabSignIn?.classList.add('border-blue-600', 'text-blue-600', 'dark:text-blue-400');
       this.tabSignIn?.classList.remove('border-transparent', 'text-slate-500');
       this.tabSignUp?.classList.remove('border-blue-600', 'text-blue-600', 'dark:text-blue-400');
       this.tabSignUp?.classList.add('border-transparent', 'text-slate-500');
       if (this.submitBtn) this.submitBtn.textContent = 'Sign In to Studio';
+      if (this.forgotPasswordBtn) this.forgotPasswordBtn.style.display = '';
     }
   }
 
@@ -228,19 +358,23 @@ class AuthModalController {
     }
   }
 
-  open() {
+  open(forceLocked = false) {
     if (!this.modal) return;
     this.clearFeedback();
 
-    if (this.currentUser) {
+    if (this.currentUser && !forceLocked) {
       // User is logged in: show profile summary
       if (this.profileSection) this.profileSection.classList.remove('hidden');
       if (this.formSection) this.formSection.classList.add('hidden');
+      if (this.closeBtn) this.closeBtn.style.display = '';
     } else {
       // User is not logged in: show login form
       if (this.profileSection) this.profileSection.classList.add('hidden');
       if (this.formSection) this.formSection.classList.remove('hidden');
       this.setMode('signin');
+      if (this.isLockedGate && this.closeBtn) {
+        this.closeBtn.style.display = 'none';
+      }
     }
 
     this.modal.classList.add('active');
@@ -248,6 +382,7 @@ class AuthModalController {
   }
 
   close() {
+    if (this.isLockedGate && !this.currentUser) return; // Cannot close if locked
     if (!this.modal) return;
     this.modal.classList.remove('active');
     document.body.style.overflow = '';
@@ -281,6 +416,21 @@ class AuthModalController {
     if (!this.authFeedback) return;
     this.authFeedback.textContent = '';
     this.authFeedback.classList.add('hidden');
+  }
+
+  showToast(message, type = 'info') {
+    const existing = document.querySelector('.auth-toast');
+    if (existing) existing.remove();
+
+    const toast = document.createElement('div');
+    toast.className = `auth-toast ${type}`;
+    toast.innerHTML = `<span>${message}</span>`;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateY(10px)';
+      setTimeout(() => toast.remove(), 300);
+    }, 4000);
   }
 }
 
@@ -489,14 +639,19 @@ class ProjectModalGallery {
 }
 
 // Auto-initialize controllers
-initSplashScreen();
 export const authController = new AuthModalController();
 export const galleryInstance = new ProjectModalGallery();
+
+// Trigger Auth Wall check immediately after preloader finishes
+initSplashScreen(() => {
+  authController.checkAuthGate();
+});
 
 if (typeof window !== 'undefined') {
   window.RL_APP = {
     auth: authController,
     gallery: galleryInstance,
+    weatherClock: liveWidgets,
     initSplashScreen
   };
 }

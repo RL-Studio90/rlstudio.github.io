@@ -2,7 +2,9 @@
 <html lang="en" class="scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <title>About Us | R &amp; L Studio - Android Mobile Developer Doha, Qatar</title>
     <meta
       name="description"
@@ -12,6 +14,14 @@
     <meta name="author" content="R &amp; L Studio" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href="https://randlstudio.netlify.app/about.html" />
+
+    <!-- Performance: DNS Prefetch & Preconnect for APIs and CDNs -->
+    <link rel="preconnect" href="https://api.open-meteo.com" />
+    <link rel="dns-prefetch" href="https://api.open-meteo.com" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
     <!-- OpenGraph Metadata -->
     <meta property="og:type" content="website" />
@@ -43,8 +53,8 @@
 
     <!-- Tailwind CSS CDN & Config -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Supabase JS Client & ESM Importmap -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Supabase JS Client & ESM Importmap (Deferred) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="importmap">
     {
       "imports": {
@@ -125,6 +135,51 @@
          1. HEADER & NAVIGATION (MULTI-PAGE ROUTING)
          ==================================================================== -->
     <header class="sticky top-0 z-40 header-glass">
+      <!-- Location-Based Live Clock & Weather Top Bar -->
+      <div class="header-top-bar border-b border-slate-200/80 dark:border-slate-800/80 px-4 sm:px-6 lg:px-8 py-1.5">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-3 text-xs">
+          <!-- Left: Location + Live Doha Clock + Weather -->
+          <div class="flex items-center gap-2 sm:gap-3 flex-wrap text-slate-700 dark:text-slate-300">
+            <!-- Location Badge -->
+            <span class="inline-flex items-center gap-1.5 font-bold text-slate-800 dark:text-slate-200">
+              <span class="text-sm leading-none" role="img" aria-label="Qatar Flag">🇶🇦</span>
+              <span>Doha, Qatar</span>
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" title="HQ Studio Live"></span>
+            </span>
+
+            <span class="text-slate-300 dark:text-slate-700 hidden sm:inline">•</span>
+
+            <!-- Real-Time Time Zone Clock (AST / UTC+3) -->
+            <div class="doha-badge" title="Doha, Qatar Time (AST / UTC+3)">
+              <svg class="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="doha-clock-time font-bold tracking-tight">--:--:--</span>
+              <span class="text-[9px] font-bold text-slate-500 dark:text-slate-400">AST</span>
+            </div>
+
+            <span class="text-slate-300 dark:text-slate-700 hidden sm:inline">•</span>
+
+            <!-- Dynamic Weather Widget (Open-Meteo) -->
+            <div id="dohaWeatherWidget" class="doha-badge" title="Live Weather in Doha, Qatar">
+              <span class="doha-weather-icon text-sm leading-none">☀️</span>
+              <span class="doha-weather-temp font-bold">--°C</span>
+              <span class="doha-weather-desc text-[10px] text-slate-600 dark:text-slate-400 hidden xs:inline">Doha</span>
+            </div>
+          </div>
+
+          <!-- Right: Quick Contact & Operating Status -->
+          <div class="hidden md:flex items-center gap-4 text-[11px] font-mono text-slate-600 dark:text-slate-400">
+            <span class="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-semibold">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              <span>Engineering Ops Online</span>
+            </span>
+            <a href="mailto:rlstudiox90@gmail.com" class="hover:text-blue-600 dark:hover:text-cyan-400 transition-colors">rlstudiox90@gmail.com</a>
+            <a href="tel:+97430854376" class="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">+974 3085 4376</a>
+          </div>
+        </div>
+      </div>
+
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         
         <!-- Brand Identity with Logo -->
@@ -132,25 +187,27 @@
           <img
             src="images/logo.png"
             alt="R & L Studio Logo"
+            width="44"
+            height="44"
             class="w-11 h-11 rounded-xl object-contain shadow-sm border border-slate-200/80 dark:border-slate-800"
             onerror="this.onerror=null; this.src='images/logo.svg';"
           />
           <div>
-            <div class="text-xl sm:text-2xl font-extrabold tracking-tight font-display text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors leading-none">
+            <div class="text-xl sm:text-2xl font-extrabold tracking-tight font-display brand-name text-slate-900 dark:text-white group-hover:text-blue-600 transition-colors leading-none">
               R &amp; L Studio
             </div>
-            <div class="text-[11px] font-mono text-slate-500 dark:text-slate-400 mt-1 truncate max-w-[200px] sm:max-w-none">
+            <div class="text-[11px] font-mono brand-subtitle text-slate-600 dark:text-slate-400 mt-1 truncate max-w-[200px] sm:max-w-none">
               Android Mobile Developer (VS Studio - Android Studio)
             </div>
           </div>
         </a>
 
         <!-- Desktop Multi-Page Navigation Links -->
-        <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600 dark:text-slate-300">
-          <a href="index.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</a>
-          <a href="portfolio.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Apps &amp; Portfolio</a>
-          <a href="about.html" class="text-blue-600 dark:text-blue-400 font-bold border-b-2 border-blue-600 dark:border-blue-400 pb-1">About Us</a>
-          <a href="contact.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Contact</a>
+        <nav class="hidden md:flex items-center gap-8 text-sm font-semibold">
+          <a href="index.html" class="nav-link">Home</a>
+          <a href="portfolio.html" class="nav-link">Apps &amp; Portfolio</a>
+          <a href="about.html" class="nav-link active">About Us</a>
+          <a href="contact.html" class="nav-link">Contact</a>
         </nav>
 
         <!-- Actions -->
@@ -194,6 +251,26 @@
 
       <!-- Mobile Dropdown Drawer -->
       <div id="mobileDrawer" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-6 space-y-4 shadow-lg">
+        <!-- Mobile Live Doha Clock & Weather Summary -->
+        <div class="p-3 rounded-xl bg-slate-100 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/80 flex items-center justify-between text-xs">
+          <div class="flex items-center gap-2">
+            <span class="text-base">🇶🇦</span>
+            <div>
+              <div class="font-bold text-slate-900 dark:text-white">Doha, Qatar</div>
+              <div class="text-[10px] font-mono text-slate-500 dark:text-slate-400">AST (UTC+3)</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="doha-badge">
+              <span class="doha-clock-time font-bold">--:--:--</span>
+            </div>
+            <div class="doha-badge">
+              <span class="doha-weather-icon">☀️</span>
+              <span class="doha-weather-temp font-bold">--°C</span>
+            </div>
+          </div>
+        </div>
+
         <a href="index.html" class="block font-semibold text-base py-1.5 text-slate-800 dark:text-slate-100 hover:text-blue-600">Home</a>
         <a href="portfolio.html" class="block font-semibold text-base py-1.5 text-slate-800 dark:text-slate-100 hover:text-blue-600">Apps &amp; Portfolio (5)</a>
         <a href="about.html" class="block font-bold text-base py-1.5 text-blue-600 dark:text-blue-400">About Studio</a>
@@ -418,7 +495,7 @@
       <div class="auth-modal-card p-6 sm:p-8">
         
         <!-- Modal Header -->
-        <div class="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800 mb-6">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800 mb-4">
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-blue-600/10 dark:bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
               <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -439,6 +516,17 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
+        </div>
+
+        <!-- Mandatory Access Protected Banner (Shown when unauthenticated lock gate is active) -->
+        <div id="authLockBanner" class="hidden p-3.5 mb-5 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-start gap-2.5 text-xs text-amber-700 dark:text-amber-400">
+          <svg class="w-4 h-4 shrink-0 mt-0.5 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+          <div>
+            <div class="font-bold">Protected Studio Portal</div>
+            <div class="text-[11px] opacity-90 mt-0.5">Authentication required. Sign in with Google or your studio credentials to access R &amp; L Studio.</div>
+          </div>
         </div>
 
         <!-- Authenticated Profile Section (Shown when user is logged in) -->
@@ -521,17 +609,42 @@
               />
             </div>
             <div>
-              <label for="authPasswordInput" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                Password
-              </label>
-              <input
-                id="authPasswordInput"
-                type="password"
-                required
-                autocomplete="current-password"
-                placeholder="••••••••"
-                class="form-input text-xs"
-              />
+              <div class="flex items-center justify-between mb-1">
+                <label for="authPasswordInput" class="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  Password
+                </label>
+                <button
+                  id="forgotPasswordBtn"
+                  type="button"
+                  class="text-[11px] font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400 hover:underline cursor-pointer"
+                >
+                  Forgot Password?
+                </button>
+              </div>
+              <div class="relative">
+                <input
+                  id="authPasswordInput"
+                  type="password"
+                  required
+                  autocomplete="current-password"
+                  placeholder="••••••••"
+                  class="form-input text-xs pr-10 w-full"
+                />
+                <button
+                  id="togglePasswordBtn"
+                  type="button"
+                  aria-label="Toggle password visibility"
+                  class="password-toggle-btn absolute inset-y-0 right-0 pr-3 flex items-center"
+                >
+                  <svg id="eyeIcon" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                  <svg id="eyeOffIcon" class="w-4 h-4 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                  </svg>
+                </button>
+              </div>
             </div>
 
             <!-- Feedback Notice -->
@@ -570,10 +683,16 @@
       // Mobile Menu Drawer Toggle
       const mobileMenuBtn = document.getElementById('mobileMenuBtn');
       const mobileDrawer = document.getElementById('mobileDrawer');
-      mobileMenuBtn?.addEventListener('click', () => {
+      mobileMenuBtn?.addEventListener('click', (e) => {
+        e.stopPropagation();
         mobileDrawer?.classList.toggle('hidden');
       });
-      mobileDrawer?.querySelectorAll('a').forEach(link => {
+      document.addEventListener('click', (e) => {
+        if (mobileDrawer && !mobileDrawer.contains(e.target) && !mobileMenuBtn?.contains(e.target)) {
+          mobileDrawer.classList.add('hidden');
+        }
+      });
+      mobileDrawer?.querySelectorAll('a, button').forEach(link => {
         link.addEventListener('click', () => mobileDrawer.classList.add('hidden'));
       });
     </script>

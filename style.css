@@ -58,6 +58,11 @@
 
 html {
   scroll-behavior: smooth;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -65,8 +70,18 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  touch-action: manipulation;
+}
+
+button, a, input, select, textarea {
+  touch-action: manipulation;
 }
 
 h1, h2, h3, h4, .font-display {
@@ -78,20 +93,90 @@ h1, h2, h3, h4, .font-display {
 
 /* Glassmorphism Top Bar */
 .header-glass {
-  background-color: rgba(15, 23, 42, 0.92);
+  background-color: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  width: 100%;
+  max-width: 100%;
 }
 
 .dark .header-glass {
-  background-color: rgba(15, 23, 42, 0.92);
+  background-color: rgba(15, 23, 42, 0.94);
   border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.35);
 }
 
-/* Multi-Page Navigation Links */
-.nav-link {
+/* ==========================================================================
+   Header Location, Live Clock & Weather Widget
+   ========================================================================== */
+.header-top-bar {
+  background-color: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  color: #334155;
+  font-size: 0.725rem;
+  line-height: 1.25;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.dark .header-top-bar {
+  background-color: #090e17;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.15);
   color: #94a3b8;
+}
+
+.doha-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 0.375rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  background-color: #f1f5f9;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.dark .doha-badge {
+  background-color: rgba(30, 41, 59, 0.85);
+  color: #f1f5f9;
+  border-color: rgba(51, 65, 85, 0.8);
+}
+
+.doha-badge:hover {
+  border-color: #0284c7;
+}
+
+.dark .doha-badge:hover {
+  border-color: #38bdf8;
+}
+
+/* Light Mode Header High-Contrast Branding */
+.header-glass .brand-name {
+  color: #0f172a !important;
+}
+
+.dark .header-glass .brand-name {
+  color: #ffffff !important;
+}
+
+.header-glass .brand-subtitle {
+  color: #475569 !important;
+}
+
+.dark .header-glass .brand-subtitle {
+  color: #94a3b8 !important;
+}
+
+/* Multi-Page Navigation Links - High Contrast Light Mode Fix */
+.nav-link {
+  color: #0f172a !important;
   font-weight: 600;
   font-size: 0.875rem;
   padding: 0.375rem 0.75rem;
@@ -105,15 +190,76 @@ h1, h2, h3, h4, .font-display {
 }
 
 .nav-link:hover {
-  color: #38bdf8;
-  background-color: rgba(56, 189, 248, 0.08);
+  color: #2563eb !important;
+  background-color: rgba(37, 99, 235, 0.08);
 }
 
 .nav-link.active {
-  color: #38bdf8;
+  color: #2563eb !important;
+  font-weight: 700;
+  background-color: rgba(37, 99, 235, 0.12);
+  border-bottom-color: #2563eb;
+}
+
+.dark .nav-link {
+  color: #94a3b8 !important;
+}
+
+.dark .nav-link:hover {
+  color: #38bdf8 !important;
+  background-color: rgba(56, 189, 248, 0.08);
+}
+
+.dark .nav-link.active {
+  color: #38bdf8 !important;
   font-weight: 700;
   background-color: rgba(56, 189, 248, 0.12);
   border-bottom-color: #38bdf8;
+}
+
+/* Header Buttons High Contrast in Light Mode */
+.auth-trigger-btn {
+  color: #0f172a !important;
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+}
+
+.auth-trigger-btn:hover {
+  background-color: #e2e8f0;
+}
+
+.dark .auth-trigger-btn {
+  color: #e2e8f0 !important;
+  background-color: #1e293b;
+  border-color: #334155;
+}
+
+.dark .auth-trigger-btn:hover {
+  background-color: #334155;
+}
+
+#themeToggle,
+#mobileMenuBtn {
+  color: #0f172a;
+  border-color: #cbd5e1;
+  background-color: #f8fafc;
+}
+
+#themeToggle:hover,
+#mobileMenuBtn:hover {
+  background-color: #f1f5f9;
+}
+
+.dark #themeToggle,
+.dark #mobileMenuBtn {
+  color: #e2e8f0;
+  border-color: #334155;
+  background-color: #0f172a;
+}
+
+.dark #themeToggle:hover,
+.dark #mobileMenuBtn:hover {
+  background-color: #1e293b;
 }
 
 /* Chat on WhatsApp Header Button */
@@ -404,7 +550,7 @@ h1, h2, h3, h4, .font-display {
 }
 
 /* ==========================================================================
-   R & L STUDIO - DARK-THEMED SPLASH SCREEN / PRELOADER
+   R & L STUDIO - DARK-THEMED SPLASH SCREEN / PRELOADER (GPU ACCELERATED)
    ========================================================================== */
 #rlSplashScreen {
   position: fixed;
@@ -417,8 +563,10 @@ h1, h2, h3, h4, .font-display {
   justify-content: center;
   opacity: 1;
   visibility: visible;
-  transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   user-select: none;
+  will-change: opacity;
+  transform: translateZ(0);
 }
 
 #rlSplashScreen.fade-out {
@@ -434,8 +582,10 @@ h1, h2, h3, h4, .font-display {
   border: 3px solid rgba(56, 189, 248, 0.15);
   border-top-color: #38bdf8;
   border-right-color: #34d399;
-  animation: splashSpin 0.85s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite;
+  animation: splashSpin 0.75s linear infinite;
   box-shadow: 0 0 25px rgba(56, 189, 248, 0.25);
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 @keyframes splashSpin {
@@ -449,7 +599,7 @@ h1, h2, h3, h4, .font-display {
 }
 
 /* ==========================================================================
-   R & L STUDIO - SUPABASE AUTH MODAL
+   R & L STUDIO - SUPABASE AUTH MODAL (MOBILE RESPONSIVE)
    ========================================================================== */
 .auth-modal-backdrop {
   position: fixed;
@@ -457,6 +607,7 @@ h1, h2, h3, h4, .font-display {
   z-index: 9999;
   background-color: rgba(2, 6, 23, 0.85);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -464,6 +615,7 @@ h1, h2, h3, h4, .font-display {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s ease;
+  will-change: opacity;
 }
 
 .auth-modal-backdrop.active {
@@ -477,14 +629,131 @@ h1, h2, h3, h4, .font-display {
   border-radius: 1.5rem;
   max-width: 28rem;
   width: 100%;
+  max-height: calc(100vh - 2rem);
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-  transform: scale(0.95);
+  transform: scale(0.96) translateZ(0);
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow: hidden;
+  will-change: transform;
   position: relative;
+  padding: 1.5rem;
+  margin: auto;
+}
+
+@media (max-width: 480px) {
+  .auth-modal-card {
+    border-radius: 1.25rem;
+    max-width: calc(100vw - 1.25rem);
+    padding: 1.25rem 1rem;
+  }
+  .header-top-bar {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  .doha-badge {
+    padding: 0.15rem 0.4rem;
+    font-size: 0.65rem;
+  }
 }
 
 .auth-modal-backdrop.active .auth-modal-card {
-  transform: scale(1);
+  transform: scale(1) translateZ(0);
+}
+
+/* ==========================================================================
+   MANDATORY LOGIN GATE / PROTECTED PORTAL (AUTH WALL)
+   ========================================================================== */
+body.auth-locked,
+html.auth-locked {
+  overflow: hidden !important;
+  height: 100vh !important;
+  touch-action: none !important;
+}
+
+body.auth-locked > :not(#authModal):not(#rlSplashScreen) {
+  filter: blur(8px) brightness(0.65);
+  pointer-events: none !important;
+  user-select: none !important;
+  transition: filter 0.35s ease, brightness 0.35s ease;
+}
+
+.auth-modal-backdrop.locked {
+  background-color: rgba(2, 6, 23, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.auth-modal-backdrop.locked #closeAuthBtn {
+  display: none !important;
+}
+
+/* Password Eye Toggle & Forgot Password Link */
+.password-toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  transition: color 0.15s ease;
+}
+
+.password-toggle-btn:hover {
+  color: #2563eb;
+}
+
+.dark .password-toggle-btn:hover {
+  color: #38bdf8;
+}
+
+/* Floating Toast Notifications */
+.auth-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.25rem;
+  border-radius: 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+  animation: slideUpToast 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+@keyframes slideUpToast {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-toast.success {
+  background-color: #064e3b;
+  color: #a7f3d0;
+  border: 1px solid #059669;
+}
+
+.auth-toast.error {
+  background-color: #7f1d1d;
+  color: #fecaca;
+  border: 1px solid #dc2626;
+}
+
+.auth-toast.info {
+  background-color: #1e3a5f;
+  color: #bae6fd;
+  border: 1px solid #0284c7;
 }
 

@@ -27,7 +27,10 @@ import {
   FileText,
   LogIn,
   User,
-  LogOut
+  LogOut,
+  Eye,
+  EyeOff,
+  Lock
 } from 'lucide-react';
 import {
   submitContactForm,
@@ -35,6 +38,7 @@ import {
   signInWithGoogle,
   signInWithEmail,
   signUpWithEmail,
+  resetPasswordForEmail,
   signOutUser,
   getSession,
   onAuthStateChange
@@ -119,8 +123,17 @@ export default function App() {
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
   const [authEmail, setAuthEmail] = useState<string>('');
   const [authPassword, setAuthPassword] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [authLoading, setAuthLoading] = useState<boolean>(false);
   const [authFeedback, setAuthFeedback] = useState<{ type: 'error' | 'success' | 'info'; text: string } | null>(null);
+
+  // Live Time Zone Clock & Weather State (Doha, Qatar)
+  const [dohaTime, setDohaTime] = useState<string>('--:--:--');
+  const [dohaWeather, setDohaWeather] = useState<{ temp: number; icon: string; desc: string }>({
+    temp: 32,
+    icon: '☀️',
+    desc: 'Clear'
+  });
 
   // Quote Calculator State
   const [quotePlatforms, setQuotePlatforms] = useState<string[]>(['iOS', 'Android']);
@@ -181,9 +194,20 @@ export default function App() {
     if (savedUrl) setCustomSupabaseUrl(savedUrl);
     if (savedKey) setCustomSupabaseKey(savedKey);
 
-    // Auto-dismiss splash screen
+    // Auto-dismiss splash screen & check mandatory auth gate
     const splashTimer = setTimeout(() => {
       setSplashVisible(false);
+      getSession().then((session) => {
+        if (session?.user) {
+          setCurrentUser(session.user);
+          setAuthModalOpen(false);
+        } else {
+          setCurrentUser(null);
+          setAuthModalOpen(true);
+        }
+      }).catch(() => {
+        setAuthModalOpen(true);
+      });
     }, 600);
 
     // Initial Supabase session check
@@ -193,13 +217,65 @@ export default function App() {
 
     // Subscribe to auth state updates
     const sub = onAuthStateChange((_event: any, session: any) => {
-      setCurrentUser(session?.user || null);
+      const user = session?.user || null;
+      setCurrentUser(user);
+      if (user) {
+        setAuthModalOpen(false);
+      }
     });
+
+    // 1. Live Time Zone Clock (Doha, Qatar AST / UTC+3)
+    const updateTime = () => {
+      try {
+        const formatter = new Intl.DateTimeFormat('en-US', {
+          timeZone: 'Asia/Qatar',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true
+        });
+        setDohaTime(formatter.format(new Date()));
+      } catch {
+        setDohaTime(new Date().toLocaleTimeString('en-US'));
+      }
+    };
+    updateTime();
+    const clockInterval = setInterval(updateTime, 1000);
+
+    // 2. Dynamic Weather Widget (Open-Meteo API)
+    const fetchWeather = async () => {
+      try {
+        const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=25.2854&longitude=51.5310&current_weather=true');
+        if (res.ok) {
+          const data = await res.json();
+          if (data?.current_weather) {
+            const w = data.current_weather;
+            let icon = w.is_day ? '☀️' : '🌙';
+            let desc = 'Clear';
+            if (w.weathercode === 1 || w.weathercode === 2) { icon = '🌤️'; desc = 'Partly Cloudy'; }
+            else if (w.weathercode === 3) { icon = '☁️'; desc = 'Overcast'; }
+            else if (w.weathercode >= 51 && w.weathercode <= 67) { icon = '🌧️'; desc = 'Rain'; }
+            else if (w.weathercode >= 95) { icon = '⛈️'; desc = 'Thunderstorm'; }
+            setDohaWeather({
+              temp: Math.round(w.temperature),
+              icon,
+              desc
+            });
+          }
+        }
+      } catch (err) {
+        console.warn('Weather fetch error:', err);
+      }
+    };
+    fetchWeather();
+    const weatherInterval = setInterval(fetchWeather, 10 * 60 * 1000);
 
     return () => {
       clearTimeout(splashTimer);
       window.removeEventListener('hashchange', handleHashChange);
       if (sub?.unsubscribe) sub.unsubscribe();
+      clearInterval(clockInterval);
+      clearInterval(weatherInterval);
     };
   }, []);
 
@@ -209,6 +285,27 @@ export default function App() {
       await signInWithGoogle();
     } catch (err: any) {
       setAuthFeedback({ type: 'error', text: err.message || 'Google Sign-In failed.' });
+    }
+  };
+
+  const handleForgotPassword = async () => {
+    if (!authEmail) {
+      setAuthFeedback({ type: 'info', text: 'Please enter your email above to receive a password reset link.' });
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(authEmail)) {
+      setAuthFeedback({ type: 'error', text: 'Please enter a valid email address.' });
+      return;
+    }
+    try {
+      setAuthLoading(true);
+      setAuthFeedback({ type: 'info', text: 'Sending password reset email...' });
+      await resetPasswordForEmail(authEmail);
+      setAuthFeedback({ type: 'success', text: `Password reset link sent to ${authEmail}! Please check your inbox.` });
+    } catch (err: any) {
+      setAuthFeedback({ type: 'error', text: err.message || 'Failed to send password reset email.' });
+    } finally {
+      setAuthLoading(false);
     }
   };
 
@@ -251,8 +348,8 @@ export default function App() {
     try {
       await signOutUser();
       setCurrentUser(null);
-      setAuthFeedback({ type: 'info', text: 'Signed out successfully.' });
-      setTimeout(() => setAuthModalOpen(false), 800);
+      setAuthFeedback({ type: 'info', text: 'Signed out successfully. Authentication required to access studio.' });
+      setAuthModalOpen(true);
     } catch (err: any) {
       setAuthFeedback({ type: 'error', text: err.message || 'Error signing out.' });
     }
@@ -422,6 +519,51 @@ export default function App() {
           TOP BAR CONTRACT: [Brand Wordmark] - [4-6 Nav Links] - [Primary Actions]
           ==================================================================== */}
       <header className="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
+        {/* Location-Based Live Clock & Weather Top Bar */}
+        <div className="header-top-bar border-b border-slate-200/80 dark:border-slate-800/80 px-4 sm:px-6 lg:px-8 py-1.5">
+          <div className="max-w-7xl mx-auto flex items-center justify-between gap-3 text-xs">
+            {/* Left: Location + Live Doha Clock + Weather */}
+            <div className="flex items-center gap-2 sm:gap-3 flex-wrap text-slate-700 dark:text-slate-300">
+              {/* Location Badge */}
+              <span className="inline-flex items-center gap-1.5 font-bold text-slate-800 dark:text-slate-200">
+                <span className="text-sm leading-none" role="img" aria-label="Qatar Flag">🇶🇦</span>
+                <span>Doha, Qatar</span>
+                <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" title="HQ Studio Live"></span>
+              </span>
+
+              <span className="text-slate-300 dark:text-slate-700 hidden sm:inline">•</span>
+
+              {/* Real-Time Time Zone Clock (AST / UTC+3) */}
+              <div className="doha-badge" title="Doha, Qatar Time (AST / UTC+3)">
+                <svg className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span className="doha-clock-time font-bold tracking-tight">{dohaTime}</span>
+                <span className="text-[9px] font-bold text-slate-500 dark:text-slate-400">AST</span>
+              </div>
+
+              <span className="text-slate-300 dark:text-slate-700 hidden sm:inline">•</span>
+
+              {/* Dynamic Weather Widget (Open-Meteo) */}
+              <div id="dohaWeatherWidget" className="doha-badge" title={`Live Weather in Doha, Qatar: ${dohaWeather.temp}°C, ${dohaWeather.desc}`}>
+                <span className="doha-weather-icon text-sm leading-none">{dohaWeather.icon}</span>
+                <span className="doha-weather-temp font-bold">{dohaWeather.temp}°C</span>
+                <span className="doha-weather-desc text-[10px] text-slate-600 dark:text-slate-400 hidden xs:inline">{dohaWeather.desc}</span>
+              </div>
+            </div>
+
+            {/* Right: Quick Contact & Operating Status */}
+            <div className="hidden md:flex items-center gap-4 text-[11px] font-mono text-slate-600 dark:text-slate-400">
+              <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                <span>Engineering Ops Online</span>
+              </span>
+              <a href="mailto:rlstudiox90@gmail.com" className="hover:text-blue-600 dark:hover:text-cyan-400 transition-colors">rlstudiox90@gmail.com</a>
+              <a href="tel:+97430854376" className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">+974 3085 4376</a>
+            </div>
+          </div>
+        </div>
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           
           {/* Zone 1: Single text element Brand Wordmark */}
@@ -545,6 +687,26 @@ export default function App() {
         {/* Mobile Navigation Dropdown */}
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-6 space-y-4">
+            {/* Mobile Live Doha Clock & Weather Summary */}
+            <div className="p-3 rounded-xl bg-slate-100 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/80 flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2">
+                <span className="text-base">🇶🇦</span>
+                <div>
+                  <div className="font-bold text-slate-900 dark:text-white">Doha, Qatar</div>
+                  <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">AST (UTC+3)</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="doha-badge">
+                  <span className="doha-clock-time font-bold">{dohaTime}</span>
+                </div>
+                <div className="doha-badge">
+                  <span className="doha-weather-icon">{dohaWeather.icon}</span>
+                  <span className="doha-weather-temp font-bold">{dohaWeather.temp}°C</span>
+                </div>
+              </div>
+            </div>
+
             <button
               onClick={() => navigateTo('home')}
               className="block w-full text-left font-semibold text-base py-2 text-slate-700 dark:text-slate-200"
@@ -1846,14 +2008,14 @@ WITH CHECK (
       ==================================================================== */}
       {authModalOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fade-in"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fade-in"
           onClick={(e) => {
-            if (e.target === e.currentTarget) setAuthModalOpen(false);
+            if (e.target === e.currentTarget && currentUser) setAuthModalOpen(false);
           }}
         >
           <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 relative">
             {/* Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800 mb-6">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800 mb-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-blue-600/10 dark:bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
                   <LogIn className="w-5 h-5" />
@@ -1867,14 +2029,29 @@ WITH CHECK (
                   </p>
                 </div>
               </div>
-              <button
-                onClick={() => setAuthModalOpen(false)}
-                className="p-2 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
-                aria-label="Close modal"
-              >
-                <X className="w-5 h-5" />
-              </button>
+              {currentUser && (
+                <button
+                  onClick={() => setAuthModalOpen(false)}
+                  className="p-2 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+                  aria-label="Close modal"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              )}
             </div>
+
+            {/* Mandatory Protected Portal Notice (Unauthenticated) */}
+            {!currentUser && (
+              <div className="p-3.5 mb-5 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-start gap-2.5 text-xs text-amber-700 dark:text-amber-400">
+                <Lock className="w-4 h-4 shrink-0 mt-0.5 text-amber-500" />
+                <div>
+                  <div className="font-bold">Protected Studio Portal</div>
+                  <div className="text-[11px] opacity-90 mt-0.5">
+                    Authentication required. Sign in with Google or your studio credentials to access R &amp; L Studio.
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Profile / Logged In State */}
             {currentUser ? (
@@ -1982,17 +2159,38 @@ WITH CHECK (
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      required
-                      value={authPassword}
-                      onChange={(e) => setAuthPassword(e.target.value)}
-                      placeholder="••••••••"
-                      className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
-                    />
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                        Password
+                      </label>
+                      {authMode === 'signin' && (
+                        <button
+                          type="button"
+                          onClick={handleForgotPassword}
+                          className="text-[11px] font-semibold text-blue-600 hover:text-blue-500 dark:text-blue-400 hover:underline cursor-pointer"
+                        >
+                          Forgot Password?
+                        </button>
+                      )}
+                    </div>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        required
+                        value={authPassword}
+                        onChange={(e) => setAuthPassword(e.target.value)}
+                        placeholder="••••••••"
+                        className="w-full px-3 py-2 pr-10 text-xs rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+                        aria-label="Toggle password visibility"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
                   </div>
 
                   {authFeedback && (
