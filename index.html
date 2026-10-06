@@ -159,11 +159,11 @@
         </a>
 
         <!-- Desktop Multi-Page Navigation Links -->
-        <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600 dark:text-slate-300">
-          <a href="index.html" class="text-blue-600 dark:text-blue-400 font-bold border-b-2 border-blue-600 dark:border-blue-400 pb-1">Home</a>
-          <a href="portfolio.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Apps &amp; Portfolio</a>
-          <a href="about.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About Us</a>
-          <a href="contact.html" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Contact</a>
+        <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-slate-400">
+          <a href="index.html" class="nav-link active">Home</a>
+          <a href="portfolio.html" class="nav-link">Apps &amp; Portfolio</a>
+          <a href="about.html" class="nav-link">About Us</a>
+          <a href="contact.html" class="nav-link">Contact</a>
         </nav>
 
         <!-- Header Actions: Sign In, Theme Toggle, WhatsApp & Mobile Menu -->
@@ -171,36 +171,39 @@
           <!-- Sign In Button (Desktop) -->
           <button
             type="button"
-            class="auth-trigger-btn flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 rounded-lg transition-colors border border-slate-200 dark:border-slate-700 cursor-pointer"
+            class="auth-trigger-btn flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-slate-200 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors border border-slate-700 cursor-pointer"
           >
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg class="w-4 h-4 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
             </svg>
             <span>Sign In</span>
           </button>
 
           <!-- Dark / Light Theme Toggle -->
-          <button id="themeToggle" type="button" aria-label="Toggle visual theme" class="p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
-            <svg id="sunIcon" class="w-4 h-4 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <button id="themeToggle" type="button" aria-label="Toggle visual theme" class="p-2.5 rounded-lg border border-slate-800 text-slate-300 hover:bg-slate-800 transition-colors cursor-pointer">
+            <svg id="sunIcon" class="w-4 h-4 hidden dark:block text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
             </svg>
-            <svg id="moonIcon" class="w-4 h-4 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg id="moonIcon" class="w-4 h-4 block dark:hidden text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
             </svg>
           </button>
 
-          <!-- Header WhatsApp Quick Button -->
+          <!-- Prominent Chat on WhatsApp Header Button -->
           <a
             href="https://wa.me/97430854376?text=Hi%20R%26L%20Studio,%20I%20would%20like%20to%20discuss%20an%20Android%20app%20project"
             target="_blank"
             rel="noopener noreferrer"
-            class="hidden sm:inline-flex items-center gap-2 px-4 py-2 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition-all whitespace-nowrap"
+            class="btn-whatsapp-header hidden sm:inline-flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg shadow-sm whitespace-nowrap"
           >
-            <span>WhatsApp</span>
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.072.043.419-.101.824z"/>
+            </svg>
+            <span>Chat on WhatsApp</span>
           </a>
 
           <!-- Mobile Hamburger -->
-          <button id="mobileMenuBtn" type="button" aria-label="Toggle navigation drawer" class="md:hidden p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300">
+          <button id="mobileMenuBtn" type="button" aria-label="Toggle navigation drawer" class="md:hidden p-2.5 rounded-lg border border-slate-800 text-slate-300">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
             </svg>
@@ -209,18 +212,18 @@
       </div>
 
       <!-- Mobile Dropdown Drawer -->
-      <div id="mobileDrawer" class="hidden md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-6 space-y-4 shadow-lg">
-        <a href="index.html" class="block font-bold text-base py-1.5 text-blue-600 dark:text-blue-400">Home</a>
-        <a href="portfolio.html" class="block font-semibold text-base py-1.5 text-slate-800 dark:text-slate-100 hover:text-blue-600">Apps &amp; Portfolio (5)</a>
-        <a href="about.html" class="block font-semibold text-base py-1.5 text-slate-800 dark:text-slate-100 hover:text-blue-600">About Studio</a>
-        <a href="contact.html" class="block font-semibold text-base py-1.5 text-slate-800 dark:text-slate-100 hover:text-blue-600">Contact Us</a>
-        <div class="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
+      <div id="mobileDrawer" class="hidden md:hidden border-t border-slate-800 bg-slate-900 px-4 py-6 space-y-4 shadow-xl">
+        <a href="index.html" class="block font-bold text-base py-1.5 text-cyan-400">Home</a>
+        <a href="portfolio.html" class="block font-semibold text-base py-1.5 text-slate-200 hover:text-cyan-400">Apps &amp; Portfolio (5)</a>
+        <a href="about.html" class="block font-semibold text-base py-1.5 text-slate-200 hover:text-cyan-400">About Studio</a>
+        <a href="contact.html" class="block font-semibold text-base py-1.5 text-slate-200 hover:text-cyan-400">Contact Us</a>
+        <div class="pt-3 border-t border-slate-800 space-y-2">
           <!-- Mobile Sign In Button -->
           <button
             type="button"
-            class="auth-trigger-btn w-full flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700"
+            class="auth-trigger-btn w-full flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-bold text-slate-200 bg-slate-800 rounded-lg border border-slate-700"
           >
-            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg class="w-4 h-4 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
             </svg>
             <span>Sign In / Studio Account</span>
@@ -231,7 +234,10 @@
             rel="noopener noreferrer"
             class="flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm"
           >
-            <span>WhatsApp (+974-3085-4376)</span>
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.043.072.043.419-.101.824z"/>
+            </svg>
+            <span>Chat on WhatsApp (+974-3085-4376)</span>
           </a>
         </div>
       </div>
