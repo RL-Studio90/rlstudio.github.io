@@ -720,6 +720,7 @@
     <script type="module" src="./js/app.js"></script>
     <script type="module">
       import { projectsData } from './js/projects-data.js';
+      import { supabase } from './js/supabase.js';
 
       // Set year
       document.getElementById('year').textContent = new Date().getFullYear();
@@ -756,22 +757,13 @@
       });
 
       // Data references
-      const rawProjects = window.RL_PROJECTS_DATA || projectsData || [];
+      let rawProjects = [];
       const grid = document.getElementById('projectsGrid');
       const noResultsState = document.getElementById('noResultsState');
       const searchInput = document.getElementById('projectSearch');
       const countAll = document.getElementById('countAll');
       const countLive = document.getElementById('countLive');
       const countDev = document.getElementById('countDev');
-
-      // Update counters
-      const allCount = rawProjects.length;
-      const liveCount = rawProjects.filter(p => p.status === 'Live').length;
-      const devCount = rawProjects.filter(p => p.status === 'In Development' || p.status === 'Beta Testing').length;
-
-      countAll.textContent = allCount;
-      countLive.textContent = liveCount;
-      countDev.textContent = devCount;
 
       let currentFilter = 'all';
       let searchQuery = '';
@@ -780,12 +772,12 @@
       window.createGradientFallback = function(containerId, title, category) {
         const container = document.getElementById(containerId);
         if (!container) return;
-        const initials = title.split(' ').map(w => w[0]).join('').substring(0, 3).toUpperCase();
+        const initials = (title || 'App').split(' ').map(w => w[0]).join('').substring(0, 3).toUpperCase();
         container.innerHTML = `
           <div class="gradient-placeholder">
             <div class="placeholder-badge">${initials}</div>
-            <div class="text-white font-bold font-display text-base tracking-wide">${title}</div>
-            <div class="text-[11px] text-blue-300 font-mono mt-1">${category}</div>
+            <div class="text-white font-bold font-display text-base tracking-wide">${title || 'App'}</div>
+            <div class="text-[11px] text-blue-300 font-mono mt-1">${category || 'Mobile App'}</div>
           </div>
         `;
       };
@@ -816,10 +808,10 @@
         currentSlideIndex = 0;
 
         modalAppTitle.textContent = app.title;
-        modalAppTagline.textContent = app.tagline || app.category;
+        modalAppTagline.textContent = app.tagline || app.app_category || app.category || '';
         modalAppStatus.textContent = app.status;
         modalAppStatus.className = app.status === 'Live' ? 'status-pill live' : (app.status === 'Beta Testing' ? 'status-pill beta' : 'status-pill dev');
-        modalAppDescription.textContent = app.fullDescription || app.description;
+        modalAppDescription.textContent = app.description || app.fullDescription || app.shortDescription || '';
 
         modalActionBtn.href = app.downloadUrl || `https://wa.me/97430854376?text=Inquiry%20regarding%20${encodeURIComponent(app.title)}`;
 
@@ -830,8 +822,8 @@
           </span>
         `).join('');
 
-        // Prepare Screenshots (ONLY project screenshots, NEVER hero.jpg fallback!)
-        activeScreenshots = app.screenshots && app.screenshots.length > 0 ? app.screenshots : (app.image ? [app.image] : []);
+        // Prepare Screenshots
+        activeScreenshots = (app.screenshots && app.screenshots.length > 0) ? app.screenshots : (app.image ? [app.image] : []);
 
         renderCarouselSlide();
         renderThumbnails();
@@ -852,7 +844,21 @@
       });
 
       function renderCarouselSlide() {
-        if (!activeScreenshots.length) return;
+        if (!activeScreenshots.length) {
+          carouselMediaContainer.innerHTML = `
+            <div class="clean-screenshot-wrapper w-full flex items-center justify-center p-8 text-center text-slate-400">
+              <div class="space-y-2">
+                <div class="text-4xl">📱</div>
+                <div class="font-bold text-white text-base">${currentApp?.title || 'Studio App'}</div>
+                <div class="text-xs text-blue-400">${currentApp?.tagline || ''}</div>
+              </div>
+            </div>
+          `;
+          screenshotCaption.textContent = currentApp?.title || 'App Preview';
+          screenshotCounter.textContent = '1 / 1';
+          return;
+        }
+
         const currentSrc = activeScreenshots[currentSlideIndex];
         const screenName = currentSrc.split('/').pop().replace('.jpg', '').replace('.png', '');
         const encodedSrc = encodeURI(currentSrc);
@@ -914,11 +920,13 @@
       }
 
       prevSlideBtn?.addEventListener('click', () => {
+        if (!activeScreenshots.length) return;
         currentSlideIndex = (currentSlideIndex - 1 + activeScreenshots.length) % activeScreenshots.length;
         renderCarouselSlide();
       });
 
       nextSlideBtn?.addEventListener('click', () => {
+        if (!activeScreenshots.length) return;
         currentSlideIndex = (currentSlideIndex + 1) % activeScreenshots.length;
         renderCarouselSlide();
       });
@@ -930,8 +938,137 @@
         if (e.key === 'Escape') closeCarouselModal();
       });
 
+      // -----------------------------------------------------------------------
+      // Skeleton Loader
+      // -----------------------------------------------------------------------
+      function renderSkeletonLoader(count = 4) {
+        if (!grid) return;
+        grid.innerHTML = Array.from({ length: count }).map((_, idx) => `
+          <article class="app-card animate-pulse border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="h-60 bg-slate-200 dark:bg-slate-800 relative">
+                <div class="absolute top-4 right-4 w-16 h-5 rounded-full bg-slate-300 dark:bg-slate-700"></div>
+                <div class="absolute bottom-3 left-4 w-24 h-4 rounded bg-slate-300 dark:bg-slate-700"></div>
+              </div>
+              <div class="p-6 space-y-3">
+                <div class="flex items-center gap-2">
+                  <div class="w-24 h-3.5 rounded bg-slate-200 dark:bg-slate-800"></div>
+                  <div class="w-12 h-3.5 rounded bg-slate-200 dark:bg-slate-800"></div>
+                </div>
+                <div class="w-3/4 h-6 rounded bg-slate-200 dark:bg-slate-800"></div>
+                <div class="w-1/2 h-4 rounded bg-blue-100 dark:bg-blue-900/30"></div>
+                <div class="space-y-2 pt-1">
+                  <div class="w-full h-3 rounded bg-slate-200 dark:bg-slate-800"></div>
+                  <div class="w-5/6 h-3 rounded bg-slate-200 dark:bg-slate-800"></div>
+                </div>
+                <div class="flex gap-2 pt-2">
+                  <div class="w-16 h-5 rounded bg-slate-200 dark:bg-slate-800"></div>
+                  <div class="w-16 h-5 rounded bg-slate-200 dark:bg-slate-800"></div>
+                </div>
+              </div>
+            </div>
+            <div class="px-6 py-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
+              <div class="w-28 h-4 rounded bg-slate-200 dark:bg-slate-800"></div>
+              <div class="w-24 h-4 rounded bg-slate-200 dark:bg-slate-800"></div>
+            </div>
+          </article>
+        `).join('');
+      }
+
+      // -----------------------------------------------------------------------
+      // Error Handler View
+      // -----------------------------------------------------------------------
+      function renderErrorState(errorMessage) {
+        if (!grid) return;
+        grid.innerHTML = `
+          <div class="col-span-full py-12 px-6 rounded-2xl border border-amber-500/30 bg-amber-500/5 text-center max-w-xl mx-auto space-y-4">
+            <div class="w-12 h-12 rounded-full bg-amber-500/10 text-amber-500 mx-auto flex items-center justify-center text-xl font-bold">⚠️</div>
+            <div>
+              <h3 class="text-base font-bold text-slate-900 dark:text-white">Unable to Load Live Projects</h3>
+              <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+                ${errorMessage || 'A network error occurred while querying the Supabase projects table.'}
+              </p>
+            </div>
+            <div class="pt-2 flex flex-wrap items-center justify-center gap-3">
+              <button id="retryFetchBtn" type="button" class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 transition cursor-pointer">
+                Retry Connection
+              </button>
+              <button id="useFallbackBtn" type="button" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 transition cursor-pointer">
+                Load Offline Projects Backup
+              </button>
+            </div>
+          </div>
+        `;
+        document.getElementById('retryFetchBtn')?.addEventListener('click', loadProjectsFromSupabase);
+        document.getElementById('useFallbackBtn')?.addEventListener('click', () => {
+          rawProjects = (projectsData || []).map(p => ({
+            ...p,
+            app_category: p.category,
+            description: p.fullDescription || p.shortDescription
+          }));
+          updateCounters();
+          renderProjects();
+        });
+      }
+
+      // -----------------------------------------------------------------------
+      // Database Schema Alignment: Map Supabase 'projects' table columns
+      // title -> App/Project Name
+      // tagline -> Short Subtitle
+      // description -> Details
+      // app_category -> Tech stack or Category badge
+      // -----------------------------------------------------------------------
+      function mapSupabaseProject(row) {
+        // Cross-reference local metadata for rich screenshots if available
+        const localMatch = (projectsData || []).find(p => 
+          (p.title && row.title && p.title.toLowerCase().trim() === row.title.toLowerCase().trim()) ||
+          (p.id && row.id && String(p.id) === String(row.id))
+        ) || {};
+
+        // Parse app_category for badges
+        const categoryRaw = row.app_category || localMatch.category || 'Mobile / Flutter';
+        const techStackList = categoryRaw.split(/[\/,·|-]/).map(s => s.trim()).filter(Boolean);
+        if (localMatch.techStack) {
+          localMatch.techStack.forEach(t => {
+            if (!techStackList.includes(t)) techStackList.push(t);
+          });
+        }
+
+        const status = row.status || localMatch.status || 'Live';
+
+        return {
+          id: String(row.id || localMatch.id || (row.title ? row.title.toLowerCase().replace(/\s+/g, '-') : 'app')),
+          title: row.title || localMatch.title || 'Studio App',
+          tagline: row.tagline || localMatch.tagline || '',
+          description: row.description || localMatch.fullDescription || localMatch.shortDescription || '',
+          shortDescription: row.description || localMatch.shortDescription || row.tagline || '',
+          fullDescription: row.description || localMatch.fullDescription || '',
+          app_category: row.app_category || localMatch.category || 'Flutter / Mobile',
+          category: row.app_category || localMatch.category || 'Mobile App',
+          techStack: techStackList.length ? techStackList : ['Flutter', 'Android'],
+          status: status,
+          screenshots: (Array.isArray(row.screenshots) && row.screenshots.length > 0) ? row.screenshots : (localMatch.screenshots || []),
+          image: (Array.isArray(row.screenshots) && row.screenshots[0]) || localMatch.image || '',
+          downloadUrl: row.download_url || localMatch.downloadUrl || 'https://wa.me/97430854376',
+          featured: row.featured !== undefined ? row.featured : (localMatch.featured ?? true),
+          rawSupabase: row
+        };
+      }
+
+      function updateCounters() {
+        const allCount = rawProjects.length;
+        const liveCount = rawProjects.filter(p => p.status === 'Live').length;
+        const devCount = rawProjects.filter(p => p.status === 'In Development' || p.status === 'Beta Testing').length;
+
+        if (countAll) countAll.textContent = allCount;
+        if (countLive) countLive.textContent = liveCount;
+        if (countDev) countDev.textContent = devCount;
+      }
+
       // Render Projects Cards
       function renderProjects() {
+        if (!grid) return;
+
         const filtered = rawProjects.filter(project => {
           let matchesFilter = false;
           if (currentFilter === 'all') matchesFilter = true;
@@ -941,11 +1078,12 @@
           let matchesSearch = true;
           if (searchQuery.trim()) {
             const q = searchQuery.toLowerCase();
-            const inTitle = project.title.toLowerCase().includes(q);
-            const inCategory = project.category.toLowerCase().includes(q);
-            const inDesc = project.shortDescription.toLowerCase().includes(q);
+            const inTitle = (project.title || '').toLowerCase().includes(q);
+            const inTagline = (project.tagline || '').toLowerCase().includes(q);
+            const inCategory = (project.app_category || project.category || '').toLowerCase().includes(q);
+            const inDesc = (project.description || project.shortDescription || '').toLowerCase().includes(q);
             const inTech = (project.techStack || []).some(t => t.toLowerCase().includes(q));
-            matchesSearch = inTitle || inCategory || inDesc || inTech;
+            matchesSearch = inTitle || inTagline || inCategory || inDesc || inTech;
           }
 
           return matchesFilter && matchesSearch;
@@ -953,11 +1091,11 @@
 
         if (filtered.length === 0) {
           grid.innerHTML = '';
-          noResultsState.classList.remove('hidden');
+          noResultsState?.classList.remove('hidden');
           return;
         }
 
-        noResultsState.classList.add('hidden');
+        noResultsState?.classList.add('hidden');
 
         grid.innerHTML = filtered.map(project => {
           const containerId = `project-img-box-${project.id}`;
@@ -976,7 +1114,7 @@
                     alt="${project.title} Preview"
                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     loading="lazy"
-                    onerror="window.createGradientFallback('${containerId}', '${project.title}', '${project.category}')"
+                    onerror="window.createGradientFallback('${containerId}', '${project.title}', '${project.app_category || project.category}')"
                   />
                   <div class="absolute top-4 right-4 ${statusClass} shadow-md">
                     ${project.status}
@@ -992,22 +1130,26 @@
                 </div>
 
                 <div class="p-6">
+                  <!-- app_category Badge -->
                   <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-2">
-                    <span class="font-medium">${project.category}</span>
+                    <span class="font-medium text-emerald-600 dark:text-emerald-400 font-mono">${project.app_category || project.category}</span>
                     <span aria-hidden="true">·</span>
                     <span class="text-blue-600 dark:text-blue-400 font-mono">${project.techStack[0] || 'Flutter'}</span>
                   </div>
 
+                  <!-- title: App / Project Name -->
                   <h2 class="text-2xl font-bold font-display text-slate-900 dark:text-white mb-1">
                     ${project.title}
                   </h2>
 
+                  <!-- tagline: Short Subtitle -->
                   <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-3">
                     ${project.tagline || ''}
                   </p>
 
+                  <!-- description: Details -->
                   <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
-                    ${project.shortDescription}
+                    ${project.description || project.shortDescription}
                   </p>
 
                   <div class="flex flex-wrap gap-1.5 mb-2">
@@ -1043,7 +1185,8 @@
 
         // Attach modal trigger click handlers
         document.querySelectorAll('.btn-open-modal').forEach(btn => {
-          btn.addEventListener('click', () => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
             const pId = btn.getAttribute('data-project-id');
             const targetProj = rawProjects.find(p => p.id === pId);
             if (targetProj) openCarouselModal(targetProj);
@@ -1051,8 +1194,55 @@
         });
       }
 
-      // Initial Render
-      renderProjects();
+      // -----------------------------------------------------------------------
+      // Fetch directly from Supabase 'projects' table
+      // -----------------------------------------------------------------------
+      async function loadProjectsFromSupabase() {
+        renderSkeletonLoader(4);
+
+        try {
+          const { data: projects, error } = await supabase.from('projects').select('*');
+
+          if (error) {
+            console.warn('Supabase projects table query returned error:', error);
+            renderErrorState(error.message || 'Error fetching projects from Supabase database.');
+            return;
+          }
+
+          if (!projects || projects.length === 0) {
+            console.info('Supabase projects table is empty, loading fallback.');
+            renderErrorState('The Supabase projects table is currently empty.');
+            return;
+          }
+
+          // Map database schema columns
+          rawProjects = projects.map(mapSupabaseProject);
+          window.RL_PROJECTS_DATA = rawProjects;
+
+          if (window.RL_APP && window.RL_APP.gallery) {
+            window.RL_APP.gallery.projects = rawProjects;
+          }
+
+          updateCounters();
+          renderProjects();
+
+          // Check URL query param to auto-open project modal e.g. portfolio.html?open=ipay-finder
+          const urlParams = new URLSearchParams(window.location.search);
+          const openId = urlParams.get('open');
+          if (openId) {
+            const targetProj = rawProjects.find(p => p.id === openId || p.title.toLowerCase().includes(openId.toLowerCase()));
+            if (targetProj) {
+              setTimeout(() => openCarouselModal(targetProj), 150);
+            }
+          }
+        } catch (err) {
+          console.error('Exception fetching from Supabase projects table:', err);
+          renderErrorState(err.message || 'Network exception occurred while connecting to Supabase.');
+        }
+      }
+
+      // Initial Fetch
+      loadProjectsFromSupabase();
 
       // Filter Button Event Listeners
       const filterButtons = document.querySelectorAll('.filter-btn');
@@ -1075,16 +1265,6 @@
         searchQuery = e.target.value;
         renderProjects();
       });
-
-      // Check URL query param to auto-open project modal e.g. portfolio.html?open=ipay-finder
-      const urlParams = new URLSearchParams(window.location.search);
-      const openId = urlParams.get('open');
-      if (openId) {
-        const targetProj = rawProjects.find(p => p.id === openId);
-        if (targetProj) {
-          setTimeout(() => openCarouselModal(targetProj), 150);
-        }
-      }
     </script>
   </body>
 </html>

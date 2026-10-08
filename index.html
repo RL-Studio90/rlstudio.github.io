@@ -465,139 +465,65 @@
           </a>
         </div>
 
-        <!-- 2 Flagship Preview Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          
-          <!-- COD Finder Card -->
-          <article class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+        <!-- Dynamic Featured Preview Cards (Connected to Supabase 'projects' table) -->
+        <div id="indexProjectsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          <!-- Animated Skeleton Loader Placeholder -->
+          <article class="app-card animate-pulse border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-sm flex flex-col justify-between">
             <div>
-              <div class="relative h-64 bg-slate-950 overflow-hidden cursor-pointer btn-open-modal" data-project-id="cod-finder">
-                <img
-                  src="images/Cod Finder Main Screen.jpg"
-                  alt="COD Finder App Preview"
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                  onerror="this.onerror=null; this.src='images/Cod Finder Splash Screen.jpg';"
-                />
-                <div class="absolute top-4 right-4 text-xs font-semibold px-2.5 py-1 rounded shadow-md bg-emerald-600 text-white">
-                  Live in Qatar
-                </div>
-                <div class="absolute bottom-3 left-4 px-2.5 py-1 rounded-md bg-slate-900/80 backdrop-blur-sm text-[11px] font-mono text-blue-300">
-                  5 Screenshots Included
-                </div>
-                <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <span class="px-3.5 py-1.5 rounded-lg bg-blue-600/90 text-white font-bold text-xs shadow-lg backdrop-blur-sm">
-                    Inspect Screenshots &rarr;
-                  </span>
-                </div>
+              <div class="h-64 bg-slate-200 dark:bg-slate-800 relative">
+                <div class="absolute top-4 right-4 w-16 h-5 rounded-full bg-slate-300 dark:bg-slate-700"></div>
+                <div class="absolute bottom-3 left-4 w-28 h-4 rounded bg-slate-300 dark:bg-slate-700"></div>
               </div>
-              <div class="p-6">
-                <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-2">
-                  <span class="font-medium">Utility / Delivery</span>
-                  <span aria-hidden="true">·</span>
-                  <span class="text-blue-600 dark:text-blue-400 font-mono">VS Studio</span>
+              <div class="p-6 space-y-3">
+                <div class="flex items-center gap-2">
+                  <div class="w-24 h-3.5 rounded bg-slate-200 dark:bg-slate-800"></div>
+                  <div class="w-12 h-3.5 rounded bg-slate-200 dark:bg-slate-800"></div>
                 </div>
-                <h3 class="text-2xl font-bold font-display text-slate-900 dark:text-white mb-1">
-                  COD Finder
-                </h3>
-                <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-3">
-                  Qatar's fastest COD machine locator
-                </p>
-                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
-                  Delivery riders ke liye Qatar me cash deposit machines (COD) fast find karne ki specialized app. Offline map caching, live operational status, aur instant route computation ke sath critical hours bachaata hai.
-                </p>
-                <div class="flex flex-wrap gap-1.5">
-                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Android Studio</span>
-                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Flutter &amp; Dart</span>
-                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Supabase</span>
-                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">GPS Routing</span>
+                <div class="w-3/4 h-6 rounded bg-slate-200 dark:bg-slate-800"></div>
+                <div class="w-1/2 h-4 rounded bg-blue-100 dark:bg-blue-900/30"></div>
+                <div class="space-y-2 pt-1">
+                  <div class="w-full h-3 rounded bg-slate-200 dark:bg-slate-800"></div>
+                  <div class="w-5/6 h-3 rounded bg-slate-200 dark:bg-slate-800"></div>
+                </div>
+                <div class="flex gap-2 pt-2">
+                  <div class="w-16 h-5 rounded bg-slate-200 dark:bg-slate-800"></div>
+                  <div class="w-16 h-5 rounded bg-slate-200 dark:bg-slate-800"></div>
                 </div>
               </div>
             </div>
-            <div class="px-6 pb-6 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-              <button
-                type="button"
-                data-project-id="cod-finder"
-                class="btn-open-modal text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
-              >
-                Inspect All Screenshots &rarr;
-              </button>
-              <a
-                href="https://wa.me/97430854376?text=Hi%20R%26L%20Studio,%20I%20am%20interested%20in%20COD%20Finder%20app"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-xs font-medium text-emerald-600 hover:underline"
-              >
-                Inquire on WhatsApp &rarr;
-              </a>
+            <div class="px-6 py-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
+              <div class="w-28 h-4 rounded bg-slate-200 dark:bg-slate-800"></div>
+              <div class="w-24 h-4 rounded bg-slate-200 dark:bg-slate-800"></div>
             </div>
           </article>
-
-          <!-- iPay Finder Card -->
-          <article class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+          <article class="app-card animate-pulse border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-sm flex flex-col justify-between">
             <div>
-              <div class="relative h-64 bg-slate-950 overflow-hidden cursor-pointer btn-open-modal" data-project-id="ipay-finder">
-                <img
-                  src="images/iPay Finder Home Screen.jpg"
-                  alt="iPay Finder App Preview"
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  loading="lazy"
-                  onerror="this.onerror=null; this.src='images/iPay Finder Splash Screen.jpg';"
-                />
-                <div class="absolute top-4 right-4 text-xs font-semibold px-2.5 py-1 rounded shadow-md bg-emerald-600 text-white">
-                  Live in Qatar
-                </div>
-                <div class="absolute bottom-3 left-4 px-2.5 py-1 rounded-md bg-slate-900/80 backdrop-blur-sm text-[11px] font-mono text-blue-300">
-                  5 Screenshots Included
-                </div>
-                <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <span class="px-3.5 py-1.5 rounded-lg bg-blue-600/90 text-white font-bold text-xs shadow-lg backdrop-blur-sm">
-                    Inspect Screenshots &rarr;
-                  </span>
-                </div>
+              <div class="h-64 bg-slate-200 dark:bg-slate-800 relative">
+                <div class="absolute top-4 right-4 w-16 h-5 rounded-full bg-slate-300 dark:bg-slate-700"></div>
+                <div class="absolute bottom-3 left-4 w-28 h-4 rounded bg-slate-300 dark:bg-slate-700"></div>
               </div>
-              <div class="p-6">
-                <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-2">
-                  <span class="font-medium">Utility / Maps</span>
-                  <span aria-hidden="true">·</span>
-                  <span class="text-blue-600 dark:text-blue-400 font-mono">Android Studio</span>
+              <div class="p-6 space-y-3">
+                <div class="flex items-center gap-2">
+                  <div class="w-24 h-3.5 rounded bg-slate-200 dark:bg-slate-800"></div>
+                  <div class="w-12 h-3.5 rounded bg-slate-200 dark:bg-slate-800"></div>
                 </div>
-                <h3 class="text-2xl font-bold font-display text-slate-900 dark:text-white mb-1">
-                  iPay Finder
-                </h3>
-                <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-3">
-                  Find. Navigate. Pay Smart.
-                </p>
-                <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
-                  Qatar me nearest payment machines ko easily locate aur navigate karne ke liye smart app. Built for Android with modern Flutter &amp; Dart architecture, Supabase backend authentication, and bilingual English &amp; Arabic localization.
-                </p>
-                <div class="flex flex-wrap gap-1.5">
-                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Android Studio</span>
-                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Flutter &amp; Dart</span>
-                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Supabase Auth</span>
-                  <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">Google Maps API</span>
+                <div class="w-3/4 h-6 rounded bg-slate-200 dark:bg-slate-800"></div>
+                <div class="w-1/2 h-4 rounded bg-blue-100 dark:bg-blue-900/30"></div>
+                <div class="space-y-2 pt-1">
+                  <div class="w-full h-3 rounded bg-slate-200 dark:bg-slate-800"></div>
+                  <div class="w-5/6 h-3 rounded bg-slate-200 dark:bg-slate-800"></div>
+                </div>
+                <div class="flex gap-2 pt-2">
+                  <div class="w-16 h-5 rounded bg-slate-200 dark:bg-slate-800"></div>
+                  <div class="w-16 h-5 rounded bg-slate-200 dark:bg-slate-800"></div>
                 </div>
               </div>
             </div>
-            <div class="px-6 pb-6 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-              <button
-                type="button"
-                data-project-id="ipay-finder"
-                class="btn-open-modal text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
-              >
-                Inspect All Screenshots &rarr;
-              </button>
-              <a
-                href="https://wa.me/97430854376?text=Hi%20R%26L%20Studio,%20I%20am%20interested%20in%20iPay%20Finder%20app"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-xs font-medium text-emerald-600 hover:underline"
-              >
-                Inquire on WhatsApp &rarr;
-              </a>
+            <div class="px-6 py-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
+              <div class="w-28 h-4 rounded bg-slate-200 dark:bg-slate-800"></div>
+              <div class="w-24 h-4 rounded bg-slate-200 dark:bg-slate-800"></div>
             </div>
           </article>
-
         </div>
 
         <!-- In-Development Radar Banner -->
@@ -1070,6 +996,7 @@
     <script type="module" src="./js/app.js"></script>
     <script type="module">
       import { projectsData } from './js/projects-data.js';
+      import { supabase } from './js/supabase.js';
 
       // Year Setup
       document.getElementById('currentYear').textContent = new Date().getFullYear();
@@ -1104,6 +1031,238 @@
       mobileDrawer?.querySelectorAll('a, button').forEach(link => {
         link.addEventListener('click', () => mobileDrawer.classList.add('hidden'));
       });
+
+      // Helper function for gradient fallback
+      window.createGradientFallback = function(containerId, title, category) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const initials = (title || 'App').split(' ').map(w => w[0]).join('').substring(0, 3).toUpperCase();
+        container.innerHTML = `
+          <div class="gradient-placeholder">
+            <div class="placeholder-badge">${initials}</div>
+            <div class="text-white font-bold font-display text-base tracking-wide">${title || 'App'}</div>
+            <div class="text-[11px] text-blue-300 font-mono mt-1">${category || 'Mobile App'}</div>
+          </div>
+        `;
+      };
+
+      // -----------------------------------------------------------------------
+      // Dynamic Data Fetching from Supabase 'projects' table
+      // Database Schema Alignment:
+      // title -> App/Project Name
+      // tagline -> Short Subtitle
+      // description -> Details
+      // app_category -> Tech stack or Category badge
+      // -----------------------------------------------------------------------
+      const grid = document.getElementById('indexProjectsGrid');
+
+      function mapSupabaseProject(row) {
+        const localMatch = (projectsData || []).find(p => 
+          (p.title && row.title && p.title.toLowerCase().trim() === row.title.toLowerCase().trim()) ||
+          (p.id && row.id && String(p.id) === String(row.id))
+        ) || {};
+
+        const categoryRaw = row.app_category || localMatch.category || 'Flutter / Mobile';
+        const techStackList = categoryRaw.split(/[\/,·|-]/).map(s => s.trim()).filter(Boolean);
+        if (localMatch.techStack) {
+          localMatch.techStack.forEach(t => {
+            if (!techStackList.includes(t)) techStackList.push(t);
+          });
+        }
+
+        const status = row.status || localMatch.status || 'Live';
+
+        return {
+          id: String(row.id || localMatch.id || (row.title ? row.title.toLowerCase().replace(/\s+/g, '-') : 'app')),
+          title: row.title || localMatch.title || 'Studio App',
+          tagline: row.tagline || localMatch.tagline || '',
+          description: row.description || localMatch.fullDescription || localMatch.shortDescription || '',
+          shortDescription: row.description || localMatch.shortDescription || row.tagline || '',
+          fullDescription: row.description || localMatch.fullDescription || '',
+          app_category: row.app_category || localMatch.category || 'Flutter / Mobile',
+          category: row.app_category || localMatch.category || 'Mobile App',
+          techStack: techStackList.length ? techStackList : ['Flutter', 'Android'],
+          status: status,
+          screenshots: (Array.isArray(row.screenshots) && row.screenshots.length > 0) ? row.screenshots : (localMatch.screenshots || []),
+          image: (Array.isArray(row.screenshots) && row.screenshots[0]) || localMatch.image || '',
+          downloadUrl: row.download_url || localMatch.downloadUrl || 'https://wa.me/97430854376',
+          featured: row.featured !== undefined ? row.featured : (localMatch.featured ?? true),
+          rawSupabase: row
+        };
+      }
+
+      function renderProjects(items) {
+        if (!grid) return;
+        if (!items || items.length === 0) {
+          grid.innerHTML = `
+            <div class="col-span-full py-12 px-6 rounded-2xl border border-slate-200 dark:border-slate-800 text-center max-w-md mx-auto space-y-2">
+              <div class="text-2xl">📁</div>
+              <h4 class="font-bold text-slate-800 dark:text-white text-sm">No live projects currently available</h4>
+              <p class="text-xs text-slate-500">Check back soon or explore our portfolio.</p>
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = items.map(project => {
+          const containerId = `index-img-box-${project.id}`;
+          const isLive = project.status === 'Live';
+          const statusClass = isLive ? 'bg-emerald-600 text-white' : 'bg-blue-600 text-white';
+          const previewImg = project.image || (project.screenshots && project.screenshots[0]) || '';
+          const screenCount = project.screenshots && project.screenshots.length > 0 ? project.screenshots.length : 1;
+
+          return `
+            <article class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group">
+              <div>
+                <!-- Top Screenshot Cover with fallback -->
+                <div id="${containerId}" class="relative h-64 bg-slate-950 overflow-hidden cursor-pointer btn-open-modal" data-project-id="${project.id}">
+                  <img
+                    src="${previewImg}"
+                    alt="${project.title} Preview"
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    loading="lazy"
+                    onerror="window.createGradientFallback('${containerId}', '${project.title}', '${project.app_category || project.category}')"
+                  />
+                  <div class="absolute top-4 right-4 text-xs font-semibold px-2.5 py-1 rounded shadow-md ${statusClass}">
+                    ${project.status} in Qatar
+                  </div>
+                  <div class="absolute bottom-3 left-4 px-2.5 py-1 rounded-md bg-slate-900/80 backdrop-blur-sm text-[11px] font-mono text-blue-300">
+                    ${screenCount} ${screenCount === 1 ? 'Screenshot' : 'Screenshots'}
+                  </div>
+                  <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <span class="px-3.5 py-1.5 rounded-lg bg-blue-600/90 text-white font-bold text-xs shadow-lg backdrop-blur-sm">
+                      Inspect Screenshots &rarr;
+                    </span>
+                  </div>
+                </div>
+
+                <div class="p-6">
+                  <!-- app_category Badge -->
+                  <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-2">
+                    <span class="font-medium text-emerald-600 dark:text-emerald-400 font-mono">${project.app_category || project.category}</span>
+                    <span aria-hidden="true">·</span>
+                    <span class="text-blue-600 dark:text-blue-400 font-mono">${project.techStack[0] || 'Flutter'}</span>
+                  </div>
+
+                  <!-- title: App / Project Name -->
+                  <h3 class="text-2xl font-bold font-display text-slate-900 dark:text-white mb-1">
+                    ${project.title}
+                  </h3>
+
+                  <!-- tagline: Short Subtitle -->
+                  <p class="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-3">
+                    ${project.tagline || ''}
+                  </p>
+
+                  <!-- description: Details -->
+                  <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                    ${project.description || project.shortDescription}
+                  </p>
+
+                  <div class="flex flex-wrap gap-1.5">
+                    ${(project.techStack || []).map(t => `
+                      <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                        ${t}
+                      </span>
+                    `).join('')}
+                  </div>
+                </div>
+              </div>
+
+              <div class="px-6 pb-6 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                <button
+                  type="button"
+                  data-project-id="${project.id}"
+                  class="btn-open-modal text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 cursor-pointer"
+                >
+                  Inspect All Screenshots &rarr;
+                </button>
+                <a
+                  href="${project.downloadUrl || 'https://wa.me/97430854376'}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-xs font-medium text-emerald-600 hover:underline"
+                >
+                  Inquire on WhatsApp &rarr;
+                </a>
+              </div>
+            </article>
+          `;
+        }).join('');
+
+        // Attach modal trigger click handlers
+        grid.querySelectorAll('.btn-open-modal').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const pId = btn.getAttribute('data-project-id');
+            const targetProj = items.find(p => p.id === pId);
+            if (targetProj && window.RL_APP && window.RL_APP.gallery) {
+              window.RL_APP.gallery.open(targetProj);
+            }
+          });
+        });
+      }
+
+      function renderErrorState(errorMessage) {
+        if (!grid) return;
+        grid.innerHTML = `
+          <div class="col-span-full py-10 px-6 rounded-2xl border border-amber-500/30 bg-amber-500/5 text-center max-w-xl mx-auto space-y-3">
+            <div class="text-2xl">⚠️</div>
+            <h4 class="font-bold text-slate-900 dark:text-white text-sm">Unable to Load Live Projects from Database</h4>
+            <p class="text-xs text-slate-600 dark:text-slate-400">${errorMessage || 'Network error while contacting Supabase.'}</p>
+            <div class="pt-2 flex justify-center gap-3">
+              <button id="retryIndexFetchBtn" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 transition cursor-pointer">
+                Retry Connection
+              </button>
+              <button id="useIndexFallbackBtn" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 transition cursor-pointer">
+                Load Offline Backup
+              </button>
+            </div>
+          </div>
+        `;
+        document.getElementById('retryIndexFetchBtn')?.addEventListener('click', loadProjects);
+        document.getElementById('useIndexFallbackBtn')?.addEventListener('click', () => {
+          renderProjects(projectsData.slice(0, 2).map(p => ({
+            ...p,
+            app_category: p.category,
+            description: p.fullDescription || p.shortDescription
+          })));
+        });
+      }
+
+      async function loadProjects() {
+        try {
+          const { data: projects, error } = await supabase.from('projects').select('*');
+
+          if (error) {
+            console.warn('Supabase projects table fetch failed:', error);
+            renderErrorState(error.message);
+            return;
+          }
+
+          if (!projects || projects.length === 0) {
+            renderErrorState('No projects currently found in Supabase table.');
+            return;
+          }
+
+          // Map database schema columns
+          const mapped = projects.map(mapSupabaseProject);
+          window.RL_PROJECTS_DATA = mapped;
+
+          if (window.RL_APP && window.RL_APP.gallery) {
+            window.RL_APP.gallery.projects = mapped;
+          }
+
+          // Display the flagship projects on the homepage
+          renderProjects(mapped.slice(0, 2));
+        } catch (err) {
+          console.error('Exception loading projects from Supabase:', err);
+          renderErrorState(err.message);
+        }
+      }
+
+      // Initial Fetch
+      loadProjects();
     </script>
   </body>
 </html>

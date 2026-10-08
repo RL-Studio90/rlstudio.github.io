@@ -10,6 +10,8 @@
  * ==============================================================================
  */
 
+import { createClient as bundledCreateClient } from '@supabase/supabase-js';
+
 export const SUPABASE_CONFIG = {
   url: "https://xwhugayxrizbiaqndycl.supabase.co",
   anonKey: "sb_publishable_ilMx2ttvWxmZMJQatWeCAg_M6-GTHSd"
@@ -20,26 +22,6 @@ export function getSupabaseConfig() {
 }
 
 let supabaseInstance = null;
-let dynamicCreateClient = null;
-
-// Dynamically resolve createClient from CDN if window.supabase is not loaded yet
-if (typeof window !== "undefined") {
-  if (window.supabase && typeof window.supabase.createClient === "function") {
-    dynamicCreateClient = window.supabase.createClient;
-  } else {
-    // Dynamic import from ESM CDN as progressive enhancement
-    import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm")
-      .then((mod) => {
-        if (mod && typeof mod.createClient === "function") {
-          dynamicCreateClient = mod.createClient;
-          if (!supabaseInstance) {
-            getSupabaseClient();
-          }
-        }
-      })
-      .catch(() => {});
-  }
-}
 
 /**
  * Initializes and returns the Supabase client with full Auth and Database support.
@@ -53,29 +35,37 @@ export function getSupabaseClient() {
 
   // 1. Check window.supabase from CDN script tag
   if (typeof window !== "undefined" && window.supabase && typeof window.supabase.createClient === "function") {
-    supabaseInstance = window.supabase.createClient(url, anonKey, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true
-      }
-    });
-    return supabaseInstance;
+    try {
+      supabaseInstance = window.supabase.createClient(url, anonKey, {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true
+        }
+      });
+      return supabaseInstance;
+    } catch (e) {
+      console.warn("window.supabase.createClient failed, falling back to bundled:", e);
+    }
   }
 
-  // 2. Check dynamicCreateClient
-  if (typeof dynamicCreateClient === "function") {
-    supabaseInstance = dynamicCreateClient(url, anonKey, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-        detectSessionInUrl: true
-      }
-    });
-    return supabaseInstance;
+  // 2. Use bundled createClient from @supabase/supabase-js
+  if (typeof bundledCreateClient === "function") {
+    try {
+      supabaseInstance = bundledCreateClient(url, anonKey, {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true
+        }
+      });
+      return supabaseInstance;
+    } catch (e) {
+      console.warn("bundledCreateClient failed, using REST fallback:", e);
+    }
   }
 
-  // 3. Fallback mock/REST client
+  // 3. Fallback direct REST client for environments without full SDK
   supabaseInstance = {
     auth: {
       signInWithOAuth: async () => ({ data: null, error: new Error("Auth client unavailable") }),
@@ -84,9 +74,30 @@ export function getSupabaseClient() {
       signOut: async () => ({ error: null }),
       getSession: async () => ({ data: { session: null }, error: null }),
       getUser: async () => ({ data: { user: null }, error: null }),
+      updateUser: async () => ({ data: null, error: new Error("Auth client unavailable") }),
       onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } })
     },
     from: (tableName) => ({
+      select: async (columns = '*') => {
+        try {
+          const selectParam = encodeURIComponent(columns);
+          const response = await fetch(`${url}/rest/v1/${tableName}?select=${selectParam}`, {
+            method: "GET",
+            headers: {
+              "apikey": anonKey,
+              "Authorization": `Bearer ${anonKey}`
+            }
+          });
+          if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            throw new Error(errData.message || `HTTP ${response.status}: ${response.statusText}`);
+          }
+          const records = await response.json();
+          return { data: records, error: null };
+        } catch (err) {
+          return { data: null, error: err };
+        }
+      },
       insert: async (records) => {
         try {
           const response = await fetch(`${url}/rest/v1/${tableName}`, {
@@ -112,6 +123,15 @@ export function getSupabaseClient() {
   };
 
   return supabaseInstance;
+}
+
+export const supabase = getSupabaseClient();
+
+if (typeof window !== "undefined") {
+  window.supabaseClient = supabase;
+  if (!window.supabase || typeof window.supabase.from !== 'function') {
+    window.supabase = supabase;
+  }
 }
 
 /* ==========================================================================
@@ -195,11 +215,37 @@ export async function resetPasswordForEmail(email) {
     throw new Error("Supabase auth is not initialized");
   }
 
-  const redirectOrigin = typeof window !== "undefined" ? window.location.origin + window.location.pathname : "";
+  const redirectUrl = typeof window !== "undefined"
+    ? window.location.origin + '/reset-password.html'
+    : 'https://randlstudio.netlify.app/reset-password.html';
+
   const { data, error } = await client.auth.resetPasswordForEmail(email.trim().toLowerCase(), {
-    redirectTo: redirectOrigin
+    redirectTo: redirectUrl
   });
-  if (error) throw error;
+
+  if (error) {
+    console.error("[Supabase resetPasswordForEmail Error]", error);
+    console.log(error.message);
+    throw error;
+  }
+  return data;
+}
+
+/**
+ * Updates user attributes (e.g., new password during recovery flow).
+ */
+export async function updateUser(attributes) {
+  const client = getSupabaseClient();
+  if (!client || !client.auth) {
+    throw new Error("Supabase auth is not initialized");
+  }
+
+  const { data, error } = await client.auth.updateUser(attributes);
+  if (error) {
+    console.error("[Supabase updateUser Error]", error);
+    console.log(error.message);
+    throw error;
+  }
   return data;
 }
 
@@ -309,6 +355,7 @@ export async function submitContactForm(formData) {
 // Global attachment for plain script tags
 if (typeof window !== "undefined") {
   window.RL_Studio_Supabase = {
+    supabase,
     getSupabaseConfig,
     getSupabaseClient,
     signInWithGoogle,
@@ -323,6 +370,7 @@ if (typeof window !== "undefined") {
 }
 
 export default {
+  supabase,
   getSupabaseConfig,
   getSupabaseClient,
   signInWithGoogle,

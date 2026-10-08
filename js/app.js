@@ -15,6 +15,7 @@ import {
   signInWithEmail,
   signUpWithEmail,
   resetPasswordForEmail,
+  updateUser,
   signOutUser,
   getSession,
   onAuthStateChange
@@ -167,7 +168,10 @@ class AuthModalController {
         this.showToast(`Password reset link sent to ${email}`, 'success');
       } catch (err) {
         console.error('[Reset Password Error]', err);
-        this.showFeedback(err.message || 'Failed to send password reset email.', 'error');
+        console.log(err?.message || err);
+        const actualError = err?.message || (typeof err === 'string' ? err : 'Error sending recovery email');
+        this.showFeedback(actualError, 'error');
+        this.showToast(actualError, 'error');
       } finally {
         this.setLoading(false);
       }
@@ -252,6 +256,12 @@ class AuthModalController {
 
     // Subscribe to auth state updates
     onAuthStateChange((event, session) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        // Open the "Set New Password" modal automatically
+        showNewPasswordModal();
+        return;
+      }
+
       const user = session?.user || null;
       this.updateUserState(user);
       if (user) {
@@ -263,6 +273,17 @@ class AuthModalController {
         this.lockGate();
       }
     });
+
+    // Check if URL hash or search params indicate password recovery mode upon load
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash || '';
+      const search = window.location.search || '';
+      if (hash.includes('type=recovery') || search.includes('type=recovery')) {
+        setTimeout(() => {
+          showNewPasswordModal();
+        }, 150);
+      }
+    }
   }
 
   async checkAuthGate() {
@@ -431,6 +452,207 @@ class AuthModalController {
       toast.style.transform = 'translateY(10px)';
       setTimeout(() => toast.remove(), 300);
     }, 4000);
+  }
+}
+
+/* ==========================================================================
+   PASSWORD RECOVERY & "SET NEW PASSWORD" MODAL CONTROLLER
+   ========================================================================== */
+export function showNewPasswordModal() {
+  let modal = document.getElementById('newPasswordModal');
+  if (!modal) {
+    // If not found in static DOM, dynamically generate and append it
+    modal = document.createElement('div');
+    modal.id = 'newPasswordModal';
+    modal.className = 'auth-modal-backdrop active';
+    modal.setAttribute('role', 'dialog');
+    modal.setAttribute('aria-modal', 'true');
+    modal.setAttribute('aria-labelledby', 'newPasswordModalTitle');
+    modal.innerHTML = `
+      <div class="auth-modal-card p-6 sm:p-8">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800 mb-5">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-600/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+            </div>
+            <div>
+              <h2 id="newPasswordModalTitle" class="text-lg font-bold font-display text-slate-900 dark:text-white">
+                Set New Password
+              </h2>
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                Secure your R &amp; L Studio account
+              </p>
+            </div>
+          </div>
+          <button id="closeNewPasswordModalBtn" type="button" aria-label="Close" class="p-2 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div id="newPasswordFeedback" class="hidden p-3 rounded-xl text-xs font-medium mb-4"></div>
+
+        <form id="newPasswordForm" class="space-y-4">
+          <div>
+            <label for="newPasswordInput" class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+              New Password
+            </label>
+            <div class="relative">
+              <input
+                id="newPasswordInput"
+                type="password"
+                required
+                minlength="6"
+                placeholder="At least 6 characters"
+                class="form-input text-xs pr-10 w-full"
+                autocomplete="new-password"
+              />
+              <button
+                id="toggleNewPassModalBtn"
+                type="button"
+                aria-label="Toggle password visibility"
+                class="password-toggle-btn absolute inset-y-0 right-0 pr-3 flex items-center"
+              >
+                <svg id="eyeIconNewPass" class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+                <svg id="eyeOffIconNewPass" class="w-4 h-4 text-slate-400 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <button
+            id="saveNewPasswordBtn"
+            type="submit"
+            class="w-full py-3 px-4 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md transition cursor-pointer flex items-center justify-center gap-2"
+          >
+            Save New Password
+          </button>
+        </form>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    bindNewPasswordModalEvents(modal);
+  } else {
+    modal.classList.remove('hidden');
+    modal.classList.add('active');
+  }
+
+  // Ensure standard auth modal is closed
+  const standardAuth = document.getElementById('authModal');
+  if (standardAuth) standardAuth.classList.remove('active');
+  document.body.style.overflow = 'hidden';
+
+  const input = modal.querySelector('#newPasswordInput');
+  if (input) {
+    setTimeout(() => input.focus(), 100);
+  }
+}
+
+export function hideNewPasswordModal() {
+  const modal = document.getElementById('newPasswordModal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.classList.add('hidden');
+  }
+  document.body.style.overflow = '';
+}
+
+function bindNewPasswordModalEvents(modal) {
+  const closeBtn = modal.querySelector('#closeNewPasswordModalBtn');
+  const form = modal.querySelector('#newPasswordForm');
+  const input = modal.querySelector('#newPasswordInput');
+  const toggleBtn = modal.querySelector('#toggleNewPassModalBtn');
+  const eyeIcon = modal.querySelector('#eyeIconNewPass');
+  const eyeOffIcon = modal.querySelector('#eyeOffIconNewPass');
+  const feedbackEl = modal.querySelector('#newPasswordFeedback');
+  const submitBtn = modal.querySelector('#saveNewPasswordBtn');
+
+  // Close handlers
+  closeBtn?.addEventListener('click', hideNewPasswordModal);
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) hideNewPasswordModal();
+  });
+
+  // Password visibility toggle
+  toggleBtn?.addEventListener('click', () => {
+    if (!input) return;
+    if (input.type === 'password') {
+      input.type = 'text';
+      eyeIcon?.classList.add('hidden');
+      eyeOffIcon?.classList.remove('hidden');
+    } else {
+      input.type = 'password';
+      eyeIcon?.classList.remove('hidden');
+      eyeOffIcon?.classList.add('hidden');
+    }
+  });
+
+  // Form Submission
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const newPassword = input?.value?.trim();
+
+    if (!newPassword || newPassword.length < 6) {
+      showModalFeedback('Password must be at least 6 characters.', 'error');
+      input?.focus();
+      return;
+    }
+
+    try {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Saving New Password...';
+      showModalFeedback('Updating your password in Supabase...', 'info');
+
+      const { data, error } = await updateUser({ password: newPassword });
+
+      if (error) {
+        console.error('[Update Password Error]', error);
+        console.log(error.message);
+        showModalFeedback(error.message || 'Failed to update password.', 'error');
+        return;
+      }
+
+      showModalFeedback('Password updated successfully! Directing to studio...', 'success');
+      if (window.RL_APP?.auth) {
+        window.RL_APP.auth.showToast('Password updated successfully!', 'success');
+        window.RL_APP.auth.unlockGate();
+      }
+
+      setTimeout(() => {
+        hideNewPasswordModal();
+        if (window.RL_APP?.auth) {
+          window.RL_APP.auth.close();
+        }
+      }, 1500);
+    } catch (err) {
+      console.error('[Update Password Exception]', err);
+      console.log(err?.message || err);
+      showModalFeedback(err?.message || 'Error updating password.', 'error');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Save New Password';
+    }
+  });
+
+  function showModalFeedback(msg, type = 'info') {
+    if (!feedbackEl) return;
+    feedbackEl.textContent = msg;
+    feedbackEl.className = 'p-3 rounded-xl text-xs font-medium mb-4';
+    if (type === 'error') {
+      feedbackEl.classList.add('bg-red-500/10', 'text-red-600', 'dark:text-red-400', 'border', 'border-red-500/20');
+    } else if (type === 'success') {
+      feedbackEl.classList.add('bg-emerald-500/10', 'text-emerald-600', 'dark:text-emerald-400', 'border', 'border-emerald-500/20');
+    } else {
+      feedbackEl.classList.add('bg-blue-500/10', 'text-blue-600', 'dark:text-blue-400', 'border', 'border-blue-500/20');
+    }
+    feedbackEl.classList.remove('hidden');
   }
 }
 
@@ -652,6 +874,9 @@ if (typeof window !== 'undefined') {
     auth: authController,
     gallery: galleryInstance,
     weatherClock: liveWidgets,
-    initSplashScreen
+    initSplashScreen,
+    showNewPasswordModal,
+    hideNewPasswordModal
   };
+  window.showNewPasswordModal = showNewPasswordModal;
 }

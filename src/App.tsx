@@ -39,9 +39,11 @@ import {
   signInWithEmail,
   signUpWithEmail,
   resetPasswordForEmail,
+  updateUser,
   signOutUser,
   getSession,
-  onAuthStateChange
+  onAuthStateChange,
+  supabase
 } from '../js/supabase.js';
 import { projectsData } from '../js/projects-data.js';
 
@@ -51,7 +53,10 @@ type PageRoute = 'home' | 'about' | 'portfolio' | 'contact' | 'privacy' | 'terms
 export interface ProjectItem {
   id: string;
   title: string;
+  tagline?: string;
   category: string;
+  app_category?: string;
+  description?: string;
   status: string;
   shortDescription: string;
   fullDescription: string;
@@ -126,6 +131,13 @@ export default function App() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [authLoading, setAuthLoading] = useState<boolean>(false);
   const [authFeedback, setAuthFeedback] = useState<{ type: 'error' | 'success' | 'info'; text: string } | null>(null);
+
+  // New Password Recovery Modal State (PASSWORD_RECOVERY event)
+  const [newPasswordModalOpen, setNewPasswordModalOpen] = useState<boolean>(false);
+  const [newPasswordValue, setNewPasswordValue] = useState<string>('');
+  const [showNewPassword, setShowNewPassword] = useState<boolean>(false);
+  const [newPasswordLoading, setNewPasswordLoading] = useState<boolean>(false);
+  const [newPasswordFeedback, setNewPasswordFeedback] = useState<{ type: 'error' | 'success' | 'info'; text: string } | null>(null);
 
   // Live Time Zone Clock & Weather State (Doha, Qatar)
   const [dohaTime, setDohaTime] = useState<string>('--:--:--');
@@ -216,13 +228,32 @@ export default function App() {
     }).catch(() => {});
 
     // Subscribe to auth state updates
-    const sub = onAuthStateChange((_event: any, session: any) => {
+    const sub = onAuthStateChange((event: any, session: any) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        // Open the "Set New Password" modal automatically
+        setNewPasswordModalOpen(true);
+        setAuthModalOpen(false);
+        return;
+      }
+
       const user = session?.user || null;
       setCurrentUser(user);
       if (user) {
         setAuthModalOpen(false);
       }
     });
+
+    // Check if URL hash indicates password recovery mode upon initial load
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash || '';
+      const search = window.location.search || '';
+      if (hash.includes('type=recovery') || search.includes('type=recovery')) {
+        setTimeout(() => {
+          setNewPasswordModalOpen(true);
+          setAuthModalOpen(false);
+        }, 200);
+      }
+    }
 
     // 1. Live Time Zone Clock (Doha, Qatar AST / UTC+3)
     const updateTime = () => {
@@ -303,7 +334,10 @@ export default function App() {
       await resetPasswordForEmail(authEmail);
       setAuthFeedback({ type: 'success', text: `Password reset link sent to ${authEmail}! Please check your inbox.` });
     } catch (err: any) {
-      setAuthFeedback({ type: 'error', text: err.message || 'Failed to send password reset email.' });
+      console.error('[Reset Password Error]', err);
+      console.log(err?.message || err);
+      const actualError = err?.message || 'Failed to send password reset email.';
+      setAuthFeedback({ type: 'error', text: actualError });
     } finally {
       setAuthLoading(false);
     }
@@ -355,6 +389,44 @@ export default function App() {
     }
   };
 
+  const handleUpdatePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newPasswordValue || newPasswordValue.length < 6) {
+      setNewPasswordFeedback({ type: 'error', text: 'Password must be at least 6 characters.' });
+      return;
+    }
+
+    try {
+      setNewPasswordLoading(true);
+      setNewPasswordFeedback({ type: 'info', text: 'Updating password in Supabase...' });
+      const { data, error } = await supabase.auth.updateUser({ password: newPasswordValue });
+
+      if (error) {
+        console.error('[Update Password Error]', error);
+        console.log(error.message);
+        setNewPasswordFeedback({ type: 'error', text: error.message || 'Failed to update password.' });
+        return;
+      }
+
+      setNewPasswordFeedback({ type: 'success', text: 'Password updated successfully!' });
+      setTimeout(() => {
+        setNewPasswordModalOpen(false);
+        setNewPasswordValue('');
+        setNewPasswordFeedback(null);
+        // Direct the user into logged-in portal
+        if (data?.user) {
+          setCurrentUser(data.user);
+        }
+      }, 1200);
+    } catch (err: any) {
+      console.error('[Update Password Exception]', err);
+      console.log(err?.message || err);
+      setNewPasswordFeedback({ type: 'error', text: err.message || 'Error updating password.' });
+    } finally {
+      setNewPasswordLoading(false);
+    }
+  };
+
   const toggleTheme = () => {
     const nextDark = !isDark;
     setIsDark(nextDark);
@@ -380,8 +452,69 @@ export default function App() {
     setTimeout(() => setCopiedCodeId(null), 2000);
   };
 
-  // Master projects loaded dynamically from js/projects-data.js
-  const projects: ProjectItem[] = projectsData;
+  // Master projects loaded dynamically from Supabase 'projects' table (with projectsData fallback)
+  const [projects, setProjects] = useState<ProjectItem[]>(projectsData);
+  const [projectsLoading, setProjectsLoading] = useState<boolean>(true);
+  const [projectsError, setProjectsError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchSupabaseProjects() {
+      try {
+        setProjectsLoading(true);
+        const { data: projectsRows, error } = await supabase.from('projects').select('*');
+
+        if (error) {
+          console.warn("Supabase projects table fetch failed:", error);
+          setProjectsError(error.message);
+          return;
+        }
+
+        if (projectsRows && projectsRows.length > 0) {
+          const mapped: ProjectItem[] = projectsRows.map((row: any) => {
+            const localMatch = projectsData.find(
+              (p) =>
+                (p.title && row.title && p.title.toLowerCase().trim() === row.title.toLowerCase().trim()) ||
+                String(p.id) === String(row.id)
+            );
+
+            const categoryRaw = row.app_category || localMatch?.category || 'Flutter / Mobile';
+            const techList = categoryRaw.split(/[\/,·|-]/).map((s: string) => s.trim()).filter(Boolean);
+            if (localMatch?.techStack) {
+              localMatch.techStack.forEach((t) => {
+                if (!techList.includes(t)) techList.push(t);
+              });
+            }
+
+            return {
+              id: String(row.id || localMatch?.id || (row.title ? row.title.toLowerCase().replace(/\s+/g, '-') : 'app')),
+              title: row.title || localMatch?.title || 'Studio App',
+              tagline: row.tagline || localMatch?.tagline || '',
+              description: row.description || localMatch?.fullDescription || localMatch?.shortDescription || '',
+              app_category: row.app_category || localMatch?.category || 'Flutter / Mobile',
+              category: row.app_category || localMatch?.category || 'Mobile App',
+              status: row.status || localMatch?.status || 'Live',
+              shortDescription: row.description || localMatch?.shortDescription || row.tagline || '',
+              fullDescription: row.description || localMatch?.fullDescription || '',
+              techStack: techList.length > 0 ? techList : ['Flutter', 'Android'],
+              image: (Array.isArray(row.screenshots) && row.screenshots[0]) || localMatch?.image || 'images/Cod Finder Main Screen.jpg',
+              downloadUrl: row.download_url || localMatch?.downloadUrl || 'https://wa.me/97430854376',
+              featured: row.featured !== undefined ? Boolean(row.featured) : (localMatch?.featured ?? true)
+            };
+          });
+
+          setProjects(mapped);
+          setProjectsError(null);
+        }
+      } catch (err: any) {
+        console.error("Exception fetching projects from Supabase in React:", err);
+        setProjectsError(err.message || 'Failed to fetch projects');
+      } finally {
+        setProjectsLoading(false);
+      }
+    }
+
+    fetchSupabaseProjects();
+  }, []);
 
   // Filtered projects
   const filteredProjects = projects.filter((p) => {
@@ -1006,16 +1139,21 @@ export default function App() {
                       </div>
                       <div className="p-8 flex-1 flex flex-col justify-between">
                         <div>
-                          <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-3">
-                            <span>{proj.category}</span>
+                          <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-2">
+                            <span className="font-mono text-emerald-600 dark:text-emerald-400 font-semibold">{proj.app_category || proj.category}</span>
                             <span aria-hidden="true">·</span>
                             <span>{proj.techStack.slice(0, 2).join(' + ')}</span>
                           </div>
-                          <h3 className="text-2xl font-bold font-display text-slate-900 dark:text-white mb-3">
+                          <h3 className="text-2xl font-bold font-display text-slate-900 dark:text-white mb-1">
                             {proj.title}
                           </h3>
+                          {proj.tagline && (
+                            <p className="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-3">
+                              {proj.tagline}
+                            </p>
+                          )}
                           <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
-                            {proj.shortDescription}
+                            {proj.description || proj.shortDescription}
                           </p>
                           <div className="flex flex-wrap gap-1.5 mb-6">
                             {proj.techStack.map((tech) => (
@@ -1321,15 +1459,20 @@ export default function App() {
 
                       <div className="p-6">
                         <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-2">
-                          <span>{p.category}</span>
+                          <span className="font-mono text-emerald-600 dark:text-emerald-400 font-semibold">{p.app_category || p.category}</span>
                           <span aria-hidden="true">·</span>
                           <span className="font-mono text-blue-600 dark:text-blue-400">{p.techStack[0] || 'Flutter'}</span>
                         </div>
-                        <h2 className="text-xl font-bold font-display text-slate-900 dark:text-white mb-2">
+                        <h2 className="text-xl font-bold font-display text-slate-900 dark:text-white mb-1">
                           {p.title}
                         </h2>
+                        {p.tagline && (
+                          <p className="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-2">
+                            {p.tagline}
+                          </p>
+                        )}
                         <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
-                          {p.shortDescription}
+                          {p.description || p.shortDescription}
                         </p>
                         <div className="flex flex-wrap gap-1 mb-4">
                           {p.techStack.map((tech) => (
@@ -2217,6 +2360,93 @@ WITH CHECK (
                 </form>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* ====================================================================
+          MODAL: SET NEW PASSWORD (PASSWORD_RECOVERY FLOW)
+      ==================================================================== */}
+      {newPasswordModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fade-in"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setNewPasswordModalOpen(false);
+          }}
+        >
+          <div className="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 relative">
+            <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800 mb-5">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-600/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
+                  <Lock className="w-5 h-5" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-bold font-display text-slate-900 dark:text-white">
+                    Set New Password
+                  </h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                    Secure your R &amp; L Studio account
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setNewPasswordModalOpen(false)}
+                className="p-2 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+                aria-label="Close modal"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {newPasswordFeedback && (
+              <div
+                className={`p-3 rounded-xl text-xs font-medium mb-4 ${
+                  newPasswordFeedback.type === 'error'
+                    ? 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20'
+                    : newPasswordFeedback.type === 'success'
+                    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+                    : 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20'
+                }`}
+              >
+                {newPasswordFeedback.text}
+              </div>
+            )}
+
+            <form onSubmit={handleUpdatePassword} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
+                  New Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showNewPassword ? 'text' : 'password'}
+                    required
+                    minLength={6}
+                    value={newPasswordValue}
+                    onChange={(e) => setNewPasswordValue(e.target.value)}
+                    placeholder="At least 6 characters"
+                    className="w-full px-3 py-2.5 pr-10 text-xs rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+                    aria-label="Toggle password visibility"
+                  >
+                    {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={newPasswordLoading}
+                className="w-full py-3 px-4 rounded-xl text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 shadow-md transition cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
+              >
+                {newPasswordLoading ? 'Saving...' : 'Save New Password'}
+              </button>
+            </form>
           </div>
         </div>
       )}

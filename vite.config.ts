@@ -20,6 +20,7 @@ export default defineConfig(() => {
           contact: path.resolve(__dirname, 'contact.html'),
           privacy: path.resolve(__dirname, 'privacy.html'),
           terms: path.resolve(__dirname, 'terms.html'),
+          resetPassword: path.resolve(__dirname, 'reset-password.html'),
         },
       },
     },
