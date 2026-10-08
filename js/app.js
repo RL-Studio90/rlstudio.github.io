@@ -163,7 +163,9 @@ class AuthModalController {
       try {
         this.setLoading(true);
         this.showFeedback('Sending password reset email...', 'info');
-        await resetPasswordForEmail(email);
+        await resetPasswordForEmail(email, {
+          redirectTo: 'https://rl-studio90.github.io/rlstudio.github.io/'
+        });
         this.showFeedback(`Password reset email sent to ${email}! Check your inbox.`, 'success');
         this.showToast(`Password reset link sent to ${email}`, 'success');
       } catch (err) {
@@ -274,15 +276,27 @@ class AuthModalController {
       }
     });
 
-    // Check if URL hash or search params indicate password recovery mode upon load
+    // Check if URL hash or search params indicate password recovery mode or access_token upon load
     if (typeof window !== 'undefined') {
-      const hash = window.location.hash || '';
-      const search = window.location.search || '';
-      if (hash.includes('type=recovery') || search.includes('type=recovery')) {
-        setTimeout(() => {
+      const checkRecoveryUrl = () => {
+        const hash = window.location.hash || '';
+        const search = window.location.search || '';
+        const isRecovery =
+          hash.includes('access_token') ||
+          hash.includes('type=recovery') ||
+          hash.includes('recovery') ||
+          search.includes('type=recovery') ||
+          search.includes('recovery');
+
+        if (isRecovery) {
           showNewPasswordModal();
-        }, 150);
-      }
+        }
+      };
+
+      // Check immediately and after potential async routing / SDK hash parsing
+      setTimeout(checkRecoveryUrl, 100);
+      setTimeout(checkRecoveryUrl, 600);
+      window.addEventListener('hashchange', checkRecoveryUrl);
     }
   }
 

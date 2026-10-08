@@ -243,16 +243,27 @@ export default function App() {
       }
     });
 
-    // Check if URL hash indicates password recovery mode upon initial load
+    // Check if URL hash or search params indicate password recovery mode or access_token upon initial load
     if (typeof window !== 'undefined') {
-      const hash = window.location.hash || '';
-      const search = window.location.search || '';
-      if (hash.includes('type=recovery') || search.includes('type=recovery')) {
-        setTimeout(() => {
+      const checkRecoveryUrl = () => {
+        const hash = window.location.hash || '';
+        const search = window.location.search || '';
+        const isRecovery =
+          hash.includes('access_token') ||
+          hash.includes('type=recovery') ||
+          hash.includes('recovery') ||
+          search.includes('type=recovery') ||
+          search.includes('recovery');
+
+        if (isRecovery) {
           setNewPasswordModalOpen(true);
           setAuthModalOpen(false);
-        }, 200);
-      }
+        }
+      };
+
+      setTimeout(checkRecoveryUrl, 100);
+      setTimeout(checkRecoveryUrl, 600);
+      window.addEventListener('hashchange', checkRecoveryUrl);
     }
 
     // 1. Live Time Zone Clock (Doha, Qatar AST / UTC+3)
@@ -331,7 +342,9 @@ export default function App() {
     try {
       setAuthLoading(true);
       setAuthFeedback({ type: 'info', text: 'Sending password reset email...' });
-      await resetPasswordForEmail(authEmail);
+      await resetPasswordForEmail(authEmail, {
+        redirectTo: 'https://rl-studio90.github.io/rlstudio.github.io/'
+      });
       setAuthFeedback({ type: 'success', text: `Password reset link sent to ${authEmail}! Please check your inbox.` });
     } catch (err: any) {
       console.error('[Reset Password Error]', err);

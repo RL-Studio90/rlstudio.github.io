@@ -209,18 +209,17 @@ export async function signUpWithEmail(email, password) {
 /**
  * Sends a password reset email via Supabase Auth.
  */
-export async function resetPasswordForEmail(email) {
+export async function resetPasswordForEmail(email, options = {}) {
   const client = getSupabaseClient();
   if (!client || !client.auth) {
     throw new Error("Supabase auth is not initialized");
   }
 
-  const redirectUrl = typeof window !== "undefined"
-    ? window.location.origin + '/reset-password.html'
-    : 'https://randlstudio.netlify.app/reset-password.html';
+  const redirectUrl = options.redirectTo || 'https://rl-studio90.github.io/rlstudio.github.io/';
 
   const { data, error } = await client.auth.resetPasswordForEmail(email.trim().toLowerCase(), {
-    redirectTo: redirectUrl
+    redirectTo: redirectUrl,
+    ...options
   });
 
   if (error) {
